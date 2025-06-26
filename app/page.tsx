@@ -22,8 +22,8 @@ export default function LucyScottHair() {
     <div className="min-h-screen gradient-background m-0 p-0">
       {/* Pure CSS Gradient Background Animation - Full Viewport */}
 
-      {/* Header - Sticky with Glass Effect - 20px top and bottom padding */}
-      <header className="fixed top-0 left-0 right-0 z-50 w-full pt-5 pb-5 bg-transparent backdrop-blur-md border-b border-[#F8E5E8]/30 transition-all duration-300">
+      {/* Header - Sticky with Glass Effect - Higher padding for mobile */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full pt-6 pb-6 md:pt-5 md:pb-5 bg-transparent backdrop-blur-md border-b border-[#F8E5E8]/30 transition-all duration-300">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo - Centered */}
@@ -33,7 +33,7 @@ export default function LucyScottHair() {
                 alt="Lucy Scott Hair"
                 width={200}
                 height={100}
-                className="h-auto max-w-[150px] md:max-w-[200px]"
+                className="h-auto max-w-[180px] md:max-w-[200px]"
                 priority
               />
             </div>
@@ -126,7 +126,7 @@ export default function LucyScottHair() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-20 md:pt-24 pb-8 md:pb-16">
+      <section className="pt-24 md:pt-24 pb-8 md:pb-16">
         <div className="w-full">
           <div
             className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -503,7 +503,7 @@ export default function LucyScottHair() {
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-[#F8E5E8]">
               <h3 className="text-2xl font-black text-[#4E4A47]">Price List</h3>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => {
                     const printWindow = window.open('', '_blank');
@@ -518,10 +518,10 @@ export default function LucyScottHair() {
                     printWindow.document.close();
                     printWindow.print();
                   }}
-                  className="lucy-button text-sm px-4 py-2 flex items-center gap-2"
+                  className="p-2 text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors"
+                  title="Print"
                 >
-                  <Printer className="w-4 h-4" />
-                  Print
+                  <Printer className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => {
@@ -536,19 +536,22 @@ export default function LucyScottHair() {
                       alert('Link copied to clipboard!');
                     }
                   }}
-                  className="lucy-button text-sm px-4 py-2 flex items-center gap-2"
+                  className="p-2 text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors"
+                  title="Share"
                 >
-                  <Share2 className="w-4 h-4" />
-                  Share
-                </button>
-                <button
-                  onClick={() => setShowPriceModal(false)}
-                  className="lucy-button text-sm px-4 py-2"
-                >
-                  <X className="w-5 h-5" />
+                  <Share2 className="w-5 h-5" />
                 </button>
               </div>
             </div>
+            
+            {/* Close Button - Top Right */}
+            <button
+              onClick={() => setShowPriceModal(false)}
+              className="absolute top-4 right-4 p-2 text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors z-10"
+              title="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
             
             {/* Modal Content */}
             <div className="p-6 overflow-y-auto max-h-[70vh] printable-area">
