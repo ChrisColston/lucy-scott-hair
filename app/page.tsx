@@ -23,7 +23,7 @@ export default function LucyScottHair() {
       {/* Pure CSS Gradient Background Animation - Full Viewport */}
 
       {/* Header - Sticky with Glass Effect - Higher padding for mobile */}
-      <header className="fixed top-0 left-0 right-0 z-50 w-full pt-8 pb-6 md:pt-5 md:pb-5 bg-transparent backdrop-blur-md border-b border-[#F8E5E8]/30 transition-all duration-300">
+      <header className="fixed top-0 left-0 right-0 z-50 w-full pt-10 pb-8 md:pt-5 md:pb-5 bg-transparent backdrop-blur-md border-b border-[#F8E5E8]/30 transition-all duration-300">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo - Centered */}
@@ -126,7 +126,7 @@ export default function LucyScottHair() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-28 md:pt-24 pb-8 md:pb-16">
+      <section className="pt-32 md:pt-24 pb-8 md:pb-16">
         <div className="w-full">
           <div
             className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -345,9 +345,9 @@ export default function LucyScottHair() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-black text-[#4E4A47] mb-2">
-                        Name *
-                      </label>
+                    <label htmlFor="name" className="text-left block text-sm font-black text-[#4E4A47] mb-2">
+                      Name *
+                    </label>
                       <Input
                         type="text"
                         id="name"
@@ -359,9 +359,9 @@ export default function LucyScottHair() {
                     </div>
                     
                     <div>
-                      <label htmlFor="contact-number" className="block text-sm font-black text-[#4E4A47] mb-2">
-                        Contact Number *
-                      </label>
+                    <label htmlFor="contact-number" className="text-left block text-sm font-black text-[#4E4A47] mb-2">
+                      Contact Number *
+                    </label>
                       <Input
                         type="tel"
                         id="contact-number"
@@ -375,9 +375,9 @@ export default function LucyScottHair() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="preferred-date" className="block text-sm font-black text-[#4E4A47] mb-2">
-                        Preferred Appointment Date
-                      </label>
+                    <label htmlFor="preferred-date" className="text-left block text-sm font-black text-[#4E4A47] mb-2">
+                      Preferred Appointment Date
+                    </label>
                       <Input
                         type="date"
                         id="preferred-date"
@@ -387,9 +387,9 @@ export default function LucyScottHair() {
                     </div>
                     
                     <div>
-                      <label htmlFor="preferred-time" className="block text-sm font-black text-[#4E4A47] mb-2">
-                        Preferred Appointment Time
-                      </label>
+                    <label htmlFor="preferred-time" className="text-left block text-sm font-black text-[#4E4A47] mb-2">
+                      Preferred Appointment Time
+                    </label>
                       <Input
                         type="time"
                         id="preferred-time"
@@ -400,7 +400,7 @@ export default function LucyScottHair() {
                   </div>
                   
                   <div>
-                    <label htmlFor="enquiry" className="block text-sm font-black text-[#4E4A47] mb-2">
+                    <label htmlFor="enquiry" className="text-left block text-sm font-black text-[#4E4A47] mb-2">
                       Enquiry *
                     </label>
                     <Textarea
@@ -501,48 +501,48 @@ export default function LucyScottHair() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-[20px] max-w-4xl max-h-[90vh] overflow-hidden relative">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-[#F8E5E8]">
-              <h3 className="text-2xl font-black text-[#4E4A47]">Price List</h3>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    const printWindow = window.open('', '_blank');
-                    printWindow.document.write(`
-                      <html>
-                        <head><title>Lucy Scott Hair - Price List</title></head>
-                        <body style="margin:0; padding:20px;">
-                          <img src="/LucyScott_Hair_Concept-10-LUCY SCOTT - Price List-2.png" style="max-width:100%; height:auto;" />
-                        </body>
-                      </html>
-                    `);
-                    printWindow.document.close();
-                    printWindow.print();
-                  }}
-                  className="p-2 text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors"
-                  title="Print"
-                >
-                  <Printer className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: 'Lucy Scott • Hair • Expert Hair Styling in Flushing',
-                        text: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing.',
-                        url: window.location.href
-                      });
-                    } else {
-                      navigator.clipboard.writeText(window.location.href);
-                      alert('Link copied to clipboard!');
-                    }
-                  }}
-                  className="p-2 text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors"
-                  title="Share"
-                >
-                  <Share2 className="w-5 h-5" />
-                </button>
+              <div className="flex justify-between items-center p-6 border-b border-[#F8E5E8]">
+                <h3 className="text-2xl font-black text-[#4E4A47]">Price List</h3>
+                <div className="flex items-center space-x-4">
+                  <button
+                    onClick={() => {
+                      const printWindow = window.open('', '_blank');
+                      printWindow.document.write(`
+                        <html>
+                          <head><title>Lucy Scott Hair - Price List</title></head>
+                          <body style="margin:0; padding:20px;">
+                            <img src="/LucyScott_Hair_Concept-10-LUCY SCOTT - Price List-2.png" style="max-width:100%; height:auto;" />
+                          </body>
+                        </html>
+                      `);
+                      printWindow.document.close();
+                      printWindow.print();
+                    }}
+                    className="text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors p-2"
+                    title="Print"
+                  >
+                    <Printer className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator.share({
+                          title: 'Lucy Scott • Hair • Expert Hair Styling in Flushing',
+                          text: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing.',
+                          url: window.location.href
+                        });
+                      } else {
+                        navigator.clipboard.writeText(window.location.href);
+                        alert('Link copied to clipboard!');
+                      }
+                    }}
+                    className="text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors p-2"
+                    title="Share"
+                  >
+                    <Share2 className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
-            </div>
             
             {/* Close Button - Top Right */}
             <button
