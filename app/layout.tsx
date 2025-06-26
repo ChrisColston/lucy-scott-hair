@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     locale: 'en_GB',
     type: 'website',
     images: [{
-      url: '/lucy-scott-hair-concept.png',
+      url: '/lucy-scott-social-share.png',
       width: 1200,
       height: 630,
       alt: 'Lucy Scott Hair - Professional Hair Styling in Flushing',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Lucy Scott • Hair • Expert Hair Styling in Flushing',
     description: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing.',
-    images: ['/lucy-scott-hair-concept.png'],
+    images: ['/lucy-scott-social-share.png'],
   },
 }
 
