@@ -3,32 +3,31 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Phone, Mail, MapPin, Scissors, Palette, Users, Clock, Star } from "lucide-react"
+import { Phone, Mail, MapPin, Scissors, Palette, Users, Clock, Star, Instagram, Send, Calendar, Printer, X, Share2 } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 
 export default function LucyScottHair() {
   const [isVisible, setIsVisible] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [showPriceModal, setShowPriceModal] = useState(false)
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Animated Gradient Background */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#FDF5EA] via-[#F8E5D6] to-[#CCA3A3] animate-gradient-shift"></div>
-        <div className="absolute inset-0 bg-gradient-to-tl from-[#F8E5D6]/50 via-transparent to-[#FDF5EA]/30 animate-gradient-shift-reverse"></div>
-      </div>
+    <div className="min-h-screen gradient-background m-0 p-0">
+      {/* Pure CSS Gradient Background Animation - Full Viewport */}
 
-      {/* Header */}
-      <header className="relative z-50 w-full py-4 bg-white/80 backdrop-blur-sm border-b border-[#CCA3A3]/20">
+      {/* Header - Sticky with Glass Effect - 20px top and bottom padding */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full pt-5 pb-5 bg-transparent backdrop-blur-md border-b border-[#F8E5E8]/30 transition-all duration-300">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex-shrink-0">
+            {/* Logo - Centered */}
+            <div className="flex-shrink-0 absolute left-1/2 transform -translate-x-1/2">
               <Image
                 src="/lucy-scott-wordmark.png"
                 alt="Lucy Scott Hair"
@@ -39,29 +38,35 @@ export default function LucyScottHair() {
               />
             </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="#about" className="text-[#4E4A47] hover:text-[#CCA3A3] transition-colors font-light">
+            {/* Desktop Navigation - Right aligned */}
+            <nav className="hidden md:flex items-center space-x-8 ml-auto">
+              <a href="#about" className="nav-font hover:text-[#D8A7B1] transition-colors">
                 About
               </a>
-              <a href="#services" className="text-[#4E4A47] hover:text-[#CCA3A3] transition-colors font-light">
+              <a href="#services" className="nav-font hover:text-[#D8A7B1] transition-colors">
                 Services & Pricing
               </a>
-              <a href="#contact" className="text-[#4E4A47] hover:text-[#CCA3A3] transition-colors font-light">
+              <a href="#contact" className="nav-font hover:text-[#D8A7B1] transition-colors">
                 Contact
               </a>
-              <Button
-                size="sm"
-                className="bg-[#FDF5EA] hover:bg-[#F8E5D6] text-[#4E4A47] px-6 py-2 text-sm font-light rounded-lg border border-[#CCA3A3]/20"
+              <a 
+                href="https://www.instagram.com/lucy_scott_hairbylucy" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[#4E4A47] hover:text-[#D8A7B1] transition-colors p-2"
+                aria-label="Follow us on Instagram"
               >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <button className="lucy-button">
                 Book Now
-              </Button>
+              </button>
             </nav>
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 text-[#4E4A47]"
+              className="md:hidden p-2 text-[#333333] absolute right-4"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? (
@@ -78,35 +83,42 @@ export default function LucyScottHair() {
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="md:hidden mt-4 py-4 border-t border-[#CCA3A3]/20">
+            <div className="md:hidden mt-4 py-4 border-t border-[#F8E5E8]/30">
               <nav className="flex flex-col space-y-4">
                 <a
                   href="#about"
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-[#4E4A47] hover:text-[#CCA3A3] transition-colors font-light"
+                  className="text-[#333333] hover:text-[#D8A7B1] transition-colors font-light"
                 >
                   About
                 </a>
                 <a
                   href="#services"
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-[#4E4A47] hover:text-[#CCA3A3] transition-colors font-light"
+                  className="text-[#333333] hover:text-[#D8A7B1] transition-colors font-light"
                 >
                   Services & Pricing
                 </a>
                 <a
                   href="#contact"
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-[#4E4A47] hover:text-[#CCA3A3] transition-colors font-light"
+                  className="text-[#333333] hover:text-[#D8A7B1] transition-colors font-light"
                 >
                   Contact
                 </a>
-                <Button
-                  size="sm"
-                  className="bg-[#FDF5EA] hover:bg-[#F8E5D6] text-[#4E4A47] px-6 py-2 text-sm font-light rounded-lg border border-[#CCA3A3]/20 w-fit"
+                <a 
+                  href="https://www.instagram.com/lucy_scott_hairbylucy" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[#333333] hover:text-[#D8A7B1] transition-colors font-light flex items-center gap-2"
+                  onClick={() => setIsMenuOpen(false)}
                 >
+                  <Instagram className="w-5 h-5" />
+                  Instagram
+                </a>
+                <button className="lucy-button text-sm px-6 py-2">
                   Book Now
-                </Button>
+                </button>
               </nav>
             </div>
           )}
@@ -114,33 +126,41 @@ export default function LucyScottHair() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-8 md:py-16">
-        <div className="container mx-auto px-4 text-center">
+      <section className="pt-20 md:pt-24 pb-8 md:pb-16">
+        <div className="w-full">
           <div
             className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
-            <p className="text-lg font-light italic text-[#4E4A47] tracking-wide mb-8">Every Style, Every Story</p>
-
-            <div className="w-full mb-12">
+            {/* Full-width Hair Wave with Parallax Tagline Overlay */}
+            <div className="relative w-full mb-12 -mx-4 md:-mx-8">
               <Image
                 src="/lucy-scott-hair-wave.png"
                 alt="Flowing hair design"
                 width={1200}
                 height={600}
-                className="w-full h-auto max-w-6xl mx-auto"
+                className="w-full h-auto"
+                priority
               />
+              {/* Prominent Tagline Overlay - Moved up 30% */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center transform -translate-y-[30%]">
+                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold text-[#4E4A47] tracking-wide text-center px-4 hero-text mb-4">
+                  Every Style, Every Story
+                </h1>
+                <p className="body-font-light text-lg md:text-xl text-[#4E4A47] text-center px-4">
+                  Where creativity meets craftsmanship
+                </p>
+              </div>
             </div>
 
-            <p className="text-xl md:text-2xl text-[#4E4A47] max-w-3xl mx-auto mb-12 leading-relaxed font-light">
-              Expert cuts, colour, and styling for all ages and genders in the heart of Flushing
-            </p>
+            <div className="container mx-auto text-center">
+              <p className="text-xl md:text-2xl text-[#4E4A47] max-w-3xl mx-auto mb-12 leading-relaxed font-light">
+                Professional cuts, colour, and styling for all ages and genders in the heart of Flushing
+              </p>
 
-            <Button
-              size="lg"
-              className="bg-[#FDF5EA] hover:bg-[#F8E5D6] text-[#4E4A47] px-12 py-6 text-lg font-light tracking-wide rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-[#CCA3A3]/20"
-            >
-              Book Now
-            </Button>
+              <button className="lucy-button px-12 py-6 text-lg font-light tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                Book Now
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -152,46 +172,55 @@ export default function LucyScottHair() {
             className={`transition-all duration-1000 delay-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
             <div className="max-w-4xl mx-auto text-center">
-              <h3 className="text-3xl md:text-4xl font-black text-[#4E4A47] mb-8 tracking-wide">About Me</h3>
+              <h3 className="text-3xl md:text-4xl font-black text-[#4E4A47] mb-8 tracking-wide">About</h3>
 
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-lg border border-[#CCA3A3]/20">
-                <p className="text-lg text-[#4E4A47] leading-relaxed mb-8 font-light italic">
-                  Lucy Scott is a local stylist and barber based in Flushing, offering expert cuts, colour, and styling
-                  for all ages and genders. From classic trims to creative restyles, every appointment is tailored to
-                  you.
+              <div className="bg-white/70 backdrop-blur-sm rounded-[20px] p-8 md:p-12 shadow-lg border-4 border-[#F8E5E8]">
+                {/* Circular Avatar Placeholder */}
+                <div className="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6 bg-[#F8E5E8] rounded-full border-4 border-[#D8A7B1] shadow-lg flex items-center justify-center">
+                  <svg className="w-12 h-12 md:w-16 md:h-16 text-[#4E4A47]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                  </svg>
+                </div>
+                
+                <p className="text-lg text-[#4E4A47] leading-relaxed mb-6 font-light">
+                  Nestled in the charming Village of Flushing, Lucy Scott Hair stands out for its welcoming and inclusive vibe, catering to all ages and genders. This environmentally conscious salon prides itself on offering personalised cutting, colouring, and styling services, ensuring each client feels valued and at ease. With a commitment to quality and a calm atmosphere, appointments are available on Tuesdays and Thursdays, so be sure to book in advance for the best experience.
+                </p>
+                
+                <p className="text-base text-[#4E4A47] leading-relaxed mb-8 font-light italic">
+                  Lucy Scott is a local stylist and barber based in Flushing, offering professional cuts, colour, and styling for all ages and genders. From classic trims to creative restyles, every appointment is tailored to you.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                   <div className="flex flex-col items-center p-4">
-                    <div className="w-16 h-16 bg-[#CCA3A3] rounded-full flex items-center justify-center mb-4">
-                      <Users className="w-8 h-8 text-[#4E4A47]" />
+                    <div className="w-16 h-16 bg-[#D8A7B1] rounded-full flex items-center justify-center mb-4">
+                      <Users className="w-8 h-8 text-[#333333]" />
                     </div>
-                    <h4 className="font-black text-[#4E4A47] mb-2">Inclusive</h4>
-                    <p className="text-sm text-[#4E4A47] text-center font-light italic">All ages and genders welcome</p>
+                    <h4 className="font-black text-[#333333] mb-2">Inclusive</h4>
+                    <p className="text-sm text-[#333333] text-center font-light italic">All ages and genders welcome</p>
                   </div>
 
                   <div className="flex flex-col items-center p-4">
-                    <div className="w-16 h-16 bg-[#CCA3A3] rounded-full flex items-center justify-center mb-4">
-                      <Scissors className="w-8 h-8 text-[#4E4A47]" />
+                    <div className="w-16 h-16 bg-[#D8A7B1] rounded-full flex items-center justify-center mb-4">
+                      <Scissors className="w-8 h-8 text-[#333333]" />
                     </div>
-                    <h4 className="font-black text-[#4E4A47] mb-2">Tailored</h4>
-                    <p className="text-sm text-[#4E4A47] text-center font-light italic">
+                    <h4 className="font-black text-[#333333] mb-2">Tailored</h4>
+                    <p className="text-sm text-[#333333] text-center font-light italic">
                       Every appointment is personalized
                     </p>
                   </div>
 
                   <div className="flex flex-col items-center p-4">
-                    <div className="w-16 h-16 bg-[#CCA3A3] rounded-full flex items-center justify-center mb-4">
-                      <Clock className="w-8 h-8 text-[#4E4A47]" />
+                    <div className="w-16 h-16 bg-[#D8A7B1] rounded-full flex items-center justify-center mb-4">
+                      <Clock className="w-8 h-8 text-[#333333]" />
                     </div>
-                    <h4 className="font-black text-[#4E4A47] mb-2">Appointment Only</h4>
-                    <p className="text-sm text-[#4E4A47] text-center font-light italic">Dedicated time just for you</p>
+                    <h4 className="font-black text-[#333333] mb-2">Appointment Only</h4>
+                    <p className="text-sm text-[#333333] text-center font-light italic">Dedicated time just for you</p>
                   </div>
                 </div>
 
                 <Badge
                   variant="secondary"
-                  className="bg-[#F8E5D6] text-[#4E4A47] px-4 py-2 text-sm font-light border border-[#CCA3A3]/20"
+                  className="bg-[#F8E5E8] text-[#333333] px-4 py-2 text-sm font-light border border-[#C1A57B]/20"
                 >
                   Friendly • Professional • Creative
                 </Badge>
@@ -208,31 +237,31 @@ export default function LucyScottHair() {
             className={`transition-all duration-1000 delay-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
             <div className="text-center mb-12">
-              <h3 className="text-3xl md:text-4xl font-black text-[#4E4A47] mb-4 tracking-wide">Services & Pricing</h3>
-              <p className="text-[#4E4A47] max-w-2xl mx-auto font-light italic">
+              <h3 className="text-3xl md:text-4xl font-black text-[#333333] mb-4 tracking-wide">Services & Pricing</h3>
+              <p className="text-[#333333] max-w-2xl mx-auto font-light italic">
                 From classic cuts to creative transformations, every service is designed around you
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              <Card className="bg-white/60 backdrop-blur-sm border border-[#CCA3A3]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+              <Card className="bg-white/[0.85] backdrop-blur-sm border-4 border-[#E5D5C8] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-[10px]">
                 <CardHeader className="text-center">
-                  <div className="w-12 h-12 bg-[#CCA3A3] rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 bg-[#D8A7B1] rounded-full flex items-center justify-center mx-auto mb-4">
                     <Scissors className="w-6 h-6 text-[#4E4A47]" />
                   </div>
                   <CardTitle className="text-xl font-black text-[#4E4A47]">Cut & Style</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
                   <p className="text-[#4E4A47] mb-4 font-light italic">
-                    Expert cuts tailored to your face shape and lifestyle
+                    Professional cuts tailored to your face shape and lifestyle
                   </p>
                   <p className="text-2xl font-black text-[#4E4A47]">From £35</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/60 backdrop-blur-sm border border-[#CCA3A3]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-lg">
+              <Card className="bg-white/[0.85] backdrop-blur-sm border-4 border-[#E5D5C8] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-[10px]">
                 <CardHeader className="text-center">
-                  <div className="w-12 h-12 bg-[#CCA3A3] rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 bg-[#D8A7B1] rounded-full flex items-center justify-center mx-auto mb-4">
                     <Palette className="w-6 h-6 text-[#4E4A47]" />
                   </div>
                   <CardTitle className="text-xl font-black text-[#4E4A47]">Colour Services</CardTitle>
@@ -245,33 +274,47 @@ export default function LucyScottHair() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/60 backdrop-blur-sm border border-[#CCA3A3]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-lg">
+              <Card className="bg-white/[0.85] backdrop-blur-sm border-4 border-[#E5D5C8] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-[10px]">
                 <CardHeader className="text-center">
-                  <div className="w-12 h-12 bg-[#CCA3A3] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Star className="w-6 h-6 text-[#4E4A47]" />
+                  <div className="w-12 h-12 bg-[#D8A7B1] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-6 h-6 text-[#4E4A47]" />
                   </div>
-                  <CardTitle className="text-xl font-black text-[#4E4A47]">Special Occasions</CardTitle>
+                  <CardTitle className="text-xl font-black text-[#4E4A47]">Men's Barbering</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
                   <p className="text-[#4E4A47] mb-4 font-light italic">
-                    Wedding hair, prom styles, and special event looks
+                    Traditional and modern barbering services for the modern man
                   </p>
-                  <p className="text-2xl font-black text-[#4E4A47]">From £45</p>
+                  <p className="text-2xl font-black text-[#4E4A47]">From £25</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white/[0.85] backdrop-blur-sm border-4 border-[#E5D5C8] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-[10px]">
+                <CardHeader className="text-center">
+                  <div className="w-12 h-12 bg-[#D8A7B1] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Star className="w-6 h-6 text-[#4E4A47]" />
+                  </div>
+                  <CardTitle className="text-xl font-black text-[#4E4A47]">Children's Cuts</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-[#4E4A47] mb-4 font-light italic">
+                    Gentle, patient cuts for little ones in a fun environment
+                  </p>
+                  <p className="text-2xl font-black text-[#4E4A47]">From £20</p>
                 </CardContent>
               </Card>
             </div>
 
             <div className="text-center mt-12">
-              <p className="text-[#4E4A47] mb-6 font-light italic">
+              <p className="text-[#333333] mb-6 font-light italic">
                 Prices may vary based on hair length and complexity. Consultation included with every service.
               </p>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-[#4E4A47] text-[#4E4A47] hover:bg-[#FDF5EA] hover:text-[#4E4A47] px-8 py-4 rounded-lg transition-all duration-300 font-light"
+              <button 
+                onClick={() => setShowPriceModal(true)}
+                className="lucy-button px-8 py-4 font-light"
               >
                 View Full Price List
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -284,55 +327,151 @@ export default function LucyScottHair() {
             className={`transition-all duration-1000 delay-900 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
             <div className="max-w-4xl mx-auto text-center">
-              <h3 className="text-3xl md:text-4xl font-black text-[#4E4A47] mb-8 tracking-wide">Get In Touch</h3>
+              <h3 className="text-3xl md:text-4xl font-black text-[#333333] mb-8 tracking-wide">Get In Touch</h3>
 
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-lg border border-[#CCA3A3]/20">
+              {/* Contact Form */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-[10px] p-8 md:p-12 shadow-lg border-4 border-[#F8E5E8] mb-8">
+                <h4 className="text-2xl font-black text-[#4E4A47] mb-4 text-center">Send us an Enquiry</h4>
+                <p className="text-center text-[#4E4A47] mb-6 font-light italic">
+                  Appointments are available by booking only. Our salon operates on Tuesdays and Thursdays, with flexible scheduling to accommodate your needs. Please contact us to discuss your requirements and check availability.
+                </p>
+                <form 
+                  name="contact" 
+                  method="POST" 
+                  data-netlify="true"
+                  className="space-y-6"
+                >
+                  <input type="hidden" name="form-name" value="contact" />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-black text-[#4E4A47] mb-2">
+                        Name *
+                      </label>
+                      <Input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px]"
+                        placeholder="Your name"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="contact-number" className="block text-sm font-black text-[#4E4A47] mb-2">
+                        Contact Number *
+                      </label>
+                      <Input
+                        type="tel"
+                        id="contact-number"
+                        name="contact-number"
+                        required
+                        className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px]"
+                        placeholder="Your phone number"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="preferred-date" className="block text-sm font-black text-[#4E4A47] mb-2">
+                        Preferred Appointment Date
+                      </label>
+                      <Input
+                        type="date"
+                        id="preferred-date"
+                        name="preferred-date"
+                        className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px]"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="preferred-time" className="block text-sm font-black text-[#4E4A47] mb-2">
+                        Preferred Appointment Time
+                      </label>
+                      <Input
+                        type="time"
+                        id="preferred-time"
+                        name="preferred-time"
+                        className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px]"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="enquiry" className="block text-sm font-black text-[#4E4A47] mb-2">
+                      Enquiry *
+                    </label>
+                    <Textarea
+                      id="enquiry"
+                      name="enquiry"
+                      required
+                      rows={4}
+                      className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px]"
+                      placeholder="Tell us about your hair goals, preferred appointment times, or any questions you have..."
+                    />
+                  </div>
+                  
+                  <div className="flex justify-center">
+                    <button
+                      type="submit"
+                      className="lucy-button w-64 px-8 py-3 font-light flex items-center justify-center gap-2"
+                    >
+                      <Send className="w-4 h-4" />
+                      Send Enquiry
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Contact Information */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-[20px] p-8 md:p-12 shadow-lg border-4 border-[#F8E5E8]">
+                <h4 className="text-2xl font-black text-[#333333] mb-6 text-center">Contact Information</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                   <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-[#CCA3A3] rounded-full flex items-center justify-center mb-4">
-                      <Phone className="w-8 h-8 text-[#4E4A47]" />
+                    <div className="w-16 h-16 bg-[#D8A7B1] rounded-full flex items-center justify-center mb-4">
+                      <Phone className="w-8 h-8 text-[#333333]" />
                     </div>
-                    <h4 className="font-black text-[#4E4A47] mb-2">Call</h4>
+                    <h4 className="font-black text-[#333333] mb-2">Call</h4>
                     <a
                       href="tel:07817869728"
-                      className="text-[#4E4A47] hover:text-[#CCA3A3] transition-colors font-light"
+                      className="text-[#333333] hover:text-[#D8A7B1] transition-colors font-light"
                     >
                       07817 869728
                     </a>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-[#CCA3A3] rounded-full flex items-center justify-center mb-4">
-                      <Mail className="w-8 h-8 text-[#4E4A47]" />
+                    <div className="w-16 h-16 bg-[#D8A7B1] rounded-full flex items-center justify-center mb-4">
+                      <Mail className="w-8 h-8 text-[#333333]" />
                     </div>
-                    <h4 className="font-black text-[#4E4A47] mb-2">Email</h4>
+                    <h4 className="font-black text-[#333333] mb-2">Email</h4>
                     <a
                       href="mailto:bookings@lucyscotthair.co.uk"
-                      className="text-[#4E4A47] hover:text-[#CCA3A3] transition-colors font-light"
+                      className="text-[#333333] hover:text-[#D8A7B1] transition-colors font-light"
                     >
                       bookings@lucyscotthair.co.uk
                     </a>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-[#CCA3A3] rounded-full flex items-center justify-center mb-4">
-                      <MapPin className="w-8 h-8 text-[#4E4A47]" />
+                    <div className="w-16 h-16 bg-[#D8A7B1] rounded-full flex items-center justify-center mb-4">
+                      <MapPin className="w-8 h-8 text-[#333333]" />
                     </div>
-                    <h4 className="font-black text-[#4E4A47] mb-2">Location</h4>
-                    <p className="text-[#4E4A47] font-light">Flushing</p>
+                    <h4 className="font-black text-[#333333] mb-2">Location</h4>
+                    <p className="text-[#333333] font-light">Flushing</p>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <Button
-                    size="lg"
-                    className="bg-[#FDF5EA] hover:bg-[#F8E5D6] text-[#4E4A47] px-12 py-6 text-lg font-light tracking-wide rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full md:w-auto border border-[#CCA3A3]/20"
-                  >
-                    Book Your Appointment
-                  </Button>
+                <div className="space-y-4 text-center">
+                  <button className="lucy-button px-12 py-6 text-lg font-light tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2 mx-auto">
+                    <Calendar className="w-5 h-5" />
+                    Availability
+                  </button>
 
                   <p className="text-sm text-[#4E4A47]/70 mt-4 font-light italic">
-                    FRESHA booking integration coming soon for easy online scheduling
+                    Coming soon: Gift cards, memberships, and our full product range available for online purchase
                   </p>
                 </div>
               </div>
@@ -347,7 +486,7 @@ export default function LucyScottHair() {
           <div
             className={`transition-all duration-1000 delay-1100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
-            <div className="text-[#4E4A47]">
+            <div className="text-[#333333]">
               <p className="text-sm mb-2 font-light">
                 © {new Date().getFullYear()} Lucy Scott Hair. All rights reserved.
               </p>
@@ -356,6 +495,74 @@ export default function LucyScottHair() {
           </div>
         </div>
       </footer>
+
+      {/* Price List Modal */}
+      {showPriceModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-[20px] max-w-4xl max-h-[90vh] overflow-hidden relative">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-[#F8E5E8]">
+              <h3 className="text-2xl font-black text-[#4E4A47]">Price List</h3>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => {
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(`
+                      <html>
+                        <head><title>Lucy Scott Hair - Price List</title></head>
+                        <body style="margin:0; padding:20px;">
+                          <img src="/LucyScott_Hair_Concept-10-LUCY SCOTT - Price List-2.png" style="max-width:100%; height:auto;" />
+                        </body>
+                      </html>
+                    `);
+                    printWindow.document.close();
+                    printWindow.print();
+                  }}
+                  className="lucy-button text-sm px-4 py-2 flex items-center gap-2"
+                >
+                  <Printer className="w-4 h-4" />
+                  Print
+                </button>
+                <button
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: 'Lucy Scott • Hair • Expert Hair Styling in Flushing',
+                        text: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing.',
+                        url: window.location.href
+                      });
+                    } else {
+                      navigator.clipboard.writeText(window.location.href);
+                      alert('Link copied to clipboard!');
+                    }
+                  }}
+                  className="lucy-button text-sm px-4 py-2 flex items-center gap-2"
+                >
+                  <Share2 className="w-4 h-4" />
+                  Share
+                </button>
+                <button
+                  onClick={() => setShowPriceModal(false)}
+                  className="lucy-button text-sm px-4 py-2"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto max-h-[70vh] printable-area">
+              <Image
+                src="/LucyScott_Hair_Concept-10-LUCY SCOTT - Price List-2.png"
+                alt="Lucy Scott Hair Price List"
+                width={800}
+                height={1000}
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
