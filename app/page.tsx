@@ -138,7 +138,7 @@ export default function LucyScottHair() {
                 alt="Flowing hair design"
                 width={1200}
                 height={600}
-                className="w-full h-auto"
+                className="w-full h-auto opacity-80"
                 priority
               />
               {/* Prominent Tagline Overlay - Moved up 30% */}
@@ -146,9 +146,9 @@ export default function LucyScottHair() {
                 <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold text-[#4E4A47] tracking-wide text-center px-4 hero-text mb-4">
                   Every Style, Every Story
                 </h1>
-                <p className="body-font-light text-lg md:text-xl text-[#4E4A47] text-center px-4">
+                <h3 className="body-font text-lg md:text-xl text-[#4E4A47] text-center px-4 font-medium">
                   Where creativity meets craftsmanship
-                </p>
+                </h3>
               </div>
             </div>
 
@@ -166,7 +166,7 @@ export default function LucyScottHair() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 md:py-24">
+      <section id="about" className="py-16 md:py-24 scroll-mt-20 md:scroll-mt-16">
         <div className="container mx-auto px-4">
           <div
             className={`transition-all duration-1000 delay-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -231,7 +231,7 @@ export default function LucyScottHair() {
       </section>
 
       {/* Services & Pricing */}
-      <section id="services" className="py-16 md:py-24">
+      <section id="services" className="py-16 md:py-24 scroll-mt-20 md:scroll-mt-16">
         <div className="container mx-auto px-4">
           <div
             className={`transition-all duration-1000 delay-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -283,7 +283,7 @@ export default function LucyScottHair() {
                 </CardHeader>
                 <CardContent className="text-center">
                   <p className="text-[#4E4A47] mb-4 font-light italic">
-                    Traditional and modern barbering services for the modern man
+                    Traditional and modern barbering services
                   </p>
                   <p className="text-2xl font-black text-[#4E4A47]">From £25</p>
                 </CardContent>
@@ -321,7 +321,7 @@ export default function LucyScottHair() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 md:py-24">
+      <section id="contact" className="py-16 md:py-24 scroll-mt-20 md:scroll-mt-16">
         <div className="container mx-auto px-4">
           <div
             className={`transition-all duration-1000 delay-900 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
