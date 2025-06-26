@@ -23,7 +23,7 @@ export default function LucyScottHair() {
       {/* Pure CSS Gradient Background Animation - Full Viewport */}
 
       {/* Header - Sticky with Glass Effect - Higher padding for mobile */}
-      <header className="fixed top-0 left-0 right-0 z-50 w-full pt-10 pb-8 md:pt-5 md:pb-5 bg-transparent backdrop-blur-md border-b border-[#F8E5E8]/30 transition-all duration-300">
+      <header className="fixed top-0 left-0 right-0 z-50 w-full pt-12 pb-10 md:pt-5 md:pb-5 bg-transparent backdrop-blur-md border-b border-[#F8E5E8]/30 transition-all duration-300">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo - Centered */}
@@ -126,7 +126,7 @@ export default function LucyScottHair() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-32 md:pt-24 pb-8 md:pb-16">
+      <section className="pt-40 md:pt-24 pb-8 md:pb-16">
         <div className="w-full">
           <div
             className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -255,7 +255,7 @@ export default function LucyScottHair() {
                   <p className="text-[#4E4A47] mb-4 font-light italic">
                     Professional cuts tailored to your face shape and lifestyle
                   </p>
-                  <p className="text-2xl font-black text-[#4E4A47]">From £35</p>
+                  <p className="text-2xl font-black text-[#4E4A47]">From £25</p>
                 </CardContent>
               </Card>
 
@@ -268,9 +268,9 @@ export default function LucyScottHair() {
                 </CardHeader>
                 <CardContent className="text-center">
                   <p className="text-[#4E4A47] mb-4 font-light italic">
-                    Full colour, highlights, balayage, and colour corrections
+                    Full colour, highlights, balayage, and colour corrections + free 15min consultation
                   </p>
-                  <p className="text-2xl font-black text-[#4E4A47]">From £55</p>
+                  <p className="text-2xl font-black text-[#4E4A47]">From £65</p>
                 </CardContent>
               </Card>
 
@@ -300,7 +300,7 @@ export default function LucyScottHair() {
                   <p className="text-[#4E4A47] mb-4 font-light italic">
                     Gentle, patient cuts for little ones in a fun environment
                   </p>
-                  <p className="text-2xl font-black text-[#4E4A47]">From £20</p>
+                  <p className="text-2xl font-black text-[#4E4A47]">From £15</p>
                 </CardContent>
               </Card>
             </div>
@@ -501,9 +501,9 @@ export default function LucyScottHair() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-[20px] max-w-4xl max-h-[90vh] overflow-hidden relative">
             {/* Modal Header */}
-              <div className="flex justify-between items-center p-6 border-b border-[#F8E5E8]">
+              <div className="flex justify-between items-center p-6 border-b border-[#F8E5E8] bg-[#FDF5EA]">
                 <h3 className="text-2xl font-black text-[#4E4A47]">Price List</h3>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-center space-x-6">
                   <button
                     onClick={() => {
                       const printWindow = window.open('', '_blank');
