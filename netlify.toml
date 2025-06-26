@@ -1,10 +1,10 @@
 [build]
   command = "npm run build"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  publish = "out"
 
 [build.environment]
   NODE_VERSION = "18"
+
+# Static export configuration for Next.js
+[context.production.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
