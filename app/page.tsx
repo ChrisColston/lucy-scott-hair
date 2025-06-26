@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Phone, Mail, MapPin, Scissors, Palette, Users, Clock, Star, Instagram, Send, Calendar, Printer, X, Share2 } from "lucide-react"
+import { Phone, Mail, MapPin, Scissors, Palette, Users, Clock, Star, Instagram, Send, Calendar, Printer, X, Share2, Map } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
@@ -13,6 +13,8 @@ export default function LucyScottHair() {
   const [isVisible, setIsVisible] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showPriceModal, setShowPriceModal] = useState(false)
+  const [showMapModal, setShowMapModal] = useState(false)
+  const [showCookieBanner, setShowCookieBanner] = useState(true)
 
   useEffect(() => {
     setIsVisible(true)
@@ -28,14 +30,16 @@ export default function LucyScottHair() {
           <div className="flex items-center justify-between">
             {/* Logo - Centered */}
             <div className="flex-shrink-0 absolute left-1/2 transform -translate-x-1/2">
-              <Image
-                src="/lucy-scott-wordmark.png"
-                alt="Lucy Scott Hair"
-                width={200}
-                height={100}
-                className="h-auto max-w-[180px] md:max-w-[200px]"
-                priority
-              />
+              <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                <Image
+                  src="/lucy-scott-wordmark.png"
+                  alt="Lucy Scott Hair"
+                  width={200}
+                  height={100}
+                  className="h-auto max-w-[180px] md:max-w-[200px] cursor-pointer"
+                  priority
+                />
+              </a>
             </div>
 
             {/* Desktop Navigation - Right aligned */}
@@ -146,15 +150,15 @@ export default function LucyScottHair() {
                 <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold text-[#4E4A47] tracking-wide text-center px-4 hero-text mb-4">
                   Every Style, Every Story
                 </h1>
-                <h3 className="body-font text-lg md:text-xl text-[#4E4A47] text-center px-4 font-medium">
+                <h2 className="body-font text-xl md:text-2xl text-[#4E4A47] text-center px-4 font-medium">
                   Where creativity meets craftsmanship
-                </h3>
+                </h2>
               </div>
             </div>
 
             <div className="container mx-auto text-center">
               <p className="text-xl md:text-2xl text-[#4E4A47] max-w-3xl mx-auto mb-12 leading-relaxed font-light">
-                Professional cuts, colour, and styling for all ages and genders in the heart of Flushing
+                Professional cuts, colour, and styling for all ages and genders in the heart of Flushing, Cornwall
               </p>
 
               <button className="lucy-button px-12 py-6 text-lg font-light tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
@@ -183,11 +187,11 @@ export default function LucyScottHair() {
                 </div>
                 
                 <p className="text-lg text-[#4E4A47] leading-relaxed mb-6 font-light">
-                  Nestled in the charming Village of Flushing, Lucy Scott Hair stands out for its welcoming and inclusive vibe, catering to all ages and genders. This environmentally conscious salon prides itself on offering personalised cutting, colouring, and styling services, ensuring each client feels valued and at ease. With a commitment to quality and a calm atmosphere, appointments are available on Tuesdays and Thursdays, so be sure to book in advance for the best experience.
+                  Nestled in the charming Village of Flushing, Cornwall, Lucy Scott Hair stands out for its welcoming and inclusive vibe, catering to all ages and genders. This environmentally conscious salon prides itself on offering personalised cutting, colouring, and styling services, ensuring each client feels valued and at ease. With a commitment to quality and a calm atmosphere, appointments are available on Tuesdays and Thursdays, so be sure to book in advance for the best experience.
                 </p>
                 
                 <p className="text-base text-[#4E4A47] leading-relaxed mb-8 font-light italic">
-                  Lucy Scott is a local stylist and barber based in Flushing, offering professional cuts, colour, and styling for all ages and genders. From classic trims to creative restyles, every appointment is tailored to you.
+                  Lucy Scott is a local stylist and barber based in Flushing, Cornwall, offering professional cuts, colour, and styling for all ages and genders. From classic trims to creative restyles, every appointment is tailored to you.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -460,7 +464,15 @@ export default function LucyScottHair() {
                       <MapPin className="w-8 h-8 text-[#333333]" />
                     </div>
                     <h4 className="font-black text-[#333333] mb-2">Location</h4>
-                    <p className="text-[#333333] font-light">Flushing</p>
+                    <p className="text-[#333333] font-light mb-2">Flushing Village Club</p>
+                    <p className="text-xs text-[#333333] font-light mb-3">Coventry Road, Flushing, Cornwall, TR11 5TY</p>
+                    <button 
+                      onClick={() => setShowMapModal(true)}
+                      className="inline-flex items-center gap-2 text-[#D8A7B1] hover:text-[#4E4A47] transition-colors text-sm font-medium"
+                    >
+                      <Map className="w-4 h-4" />
+                      See map
+                    </button>
                   </div>
                 </div>
 
@@ -503,7 +515,7 @@ export default function LucyScottHair() {
             {/* Modal Header */}
               <div className="flex justify-between items-center p-6 border-b border-[#F8E5E8] bg-[#FDF5EA]">
                 <h3 className="text-2xl font-black text-[#4E4A47]">Price List</h3>
-                <div className="flex items-center justify-center space-x-6">
+                <div className="flex items-center gap-4">
                   <button
                     onClick={() => {
                       const printWindow = window.open('', '_blank');
@@ -527,8 +539,8 @@ export default function LucyScottHair() {
                     onClick={() => {
                       if (navigator.share) {
                         navigator.share({
-                          title: 'Lucy Scott • Hair • Expert Hair Styling in Flushing',
-                          text: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing.',
+                          title: 'Lucy Scott • Hair • Hair Styling in Flushing, Cornwall',
+                          text: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing, Cornwall.',
                           url: window.location.href
                         });
                       } else {
@@ -562,6 +574,77 @@ export default function LucyScottHair() {
                 height={1000}
                 className="w-full h-auto rounded-lg"
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Map Modal */}
+      {showMapModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-[20px] max-w-4xl max-h-[90vh] overflow-hidden relative">
+            {/* Modal Header */}
+            <div className="flex justify-between items-center p-6 border-b border-[#F8E5E8] bg-[#FDF5EA]">
+              <h3 className="text-2xl font-black text-[#4E4A47]">Location</h3>
+            </div>
+            
+            {/* Close Button - Top Right */}
+            <button
+              onClick={() => setShowMapModal(false)}
+              className="absolute top-4 right-4 p-2 text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors z-10"
+              title="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            {/* Modal Content */}
+            <div className="p-6">
+              <div className="mb-4">
+                <h4 className="font-black text-[#4E4A47] mb-2">Flushing Village Club</h4>
+                <p className="text-[#333333] text-sm">Coventry Road, Flushing, Cornwall, TR11 5TY</p>
+              </div>
+              <div className="w-full h-96 rounded-lg overflow-hidden">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2530.1234567890123!2d-5.0987654321098765!3d50.1234567890123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sFlushing%20Village%20Club%2C%20Coventry%20Road%2C%20Flushing%2C%20Cornwall%20TR11%205TY!5e0!3m2!1sen!2suk!4v1234567890123!5m2!1sen!2suk"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Flushing Village Club Location"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cookie Banner */}
+      {showCookieBanner && (
+        <div className="fixed bottom-0 left-0 right-0 z-[90] bg-[#FDF5EA] border-t border-[#4E4A47]/20 p-4 shadow-lg">
+          <div className="container mx-auto">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="text-[#4E4A47] text-sm flex-1">
+                <p>
+                  We use essential cookies to ensure our website works properly. By continuing to use this site, you agree to our use of cookies.
+                  <a href="#" className="underline hover:text-[#D8A7B1] ml-1">Learn more</a>
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowCookieBanner(false)}
+                  className="bg-[#4E4A47] text-[#FDF5EA] px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#333333] transition-colors"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() => setShowCookieBanner(false)}
+                  className="text-[#4E4A47] px-4 py-2 text-sm hover:text-[#D8A7B1] transition-colors"
+                >
+                  Dismiss
+                </button>
+              </div>
             </div>
           </div>
         </div>

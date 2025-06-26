@@ -3,13 +3,13 @@ import './globals.css'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://lucyscotthair.co.uk'),
-  title: 'Lucy Scott • Hair • Expert Hair Styling in Flushing',
-  description: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing. Environmentally conscious salon with personalised appointments on Tuesdays and Thursdays.',
+  title: 'Lucy Scott • Hair • Hair Styling in Flushing, Cornwall',
+  description: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing, Cornwall. Environmentally conscious salon with personalised appointments on Tuesdays and Thursdays.',
   keywords: 'hair salon, hair stylist, hair cutting, hair colouring, barber, Flushing, Cornwall, unisex salon',
   authors: [{ name: 'Lucy Scott Hair' }],
   openGraph: {
-    title: 'Lucy Scott • Hair • Expert Hair Styling in Flushing',
-    description: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing.',
+    title: 'Lucy Scott • Hair • Hair Styling in Flushing, Cornwall',
+    description: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing, Cornwall.',
     url: 'https://lucyscotthair.co.uk',
     siteName: 'Lucy Scott Hair',
     locale: 'en_GB',
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Lucy Scott • Hair • Expert Hair Styling in Flushing',
-    description: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing.',
+    title: 'Lucy Scott • Hair • Hair Styling in Flushing, Cornwall',
+    description: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing, Cornwall.',
     images: ['/lucy-scott-social-share.png'],
   },
 }
