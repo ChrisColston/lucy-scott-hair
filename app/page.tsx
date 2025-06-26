@@ -23,7 +23,7 @@ export default function LucyScottHair() {
       {/* Pure CSS Gradient Background Animation - Full Viewport */}
 
       {/* Header - Sticky with Glass Effect - Higher padding for mobile */}
-      <header className="fixed top-0 left-0 right-0 z-50 w-full pt-6 pb-6 md:pt-5 md:pb-5 bg-transparent backdrop-blur-md border-b border-[#F8E5E8]/30 transition-all duration-300">
+      <header className="fixed top-0 left-0 right-0 z-50 w-full pt-8 pb-6 md:pt-5 md:pb-5 bg-transparent backdrop-blur-md border-b border-[#F8E5E8]/30 transition-all duration-300">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo - Centered */}
@@ -126,7 +126,7 @@ export default function LucyScottHair() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-24 md:pt-24 pb-8 md:pb-16">
+      <section className="pt-28 md:pt-24 pb-8 md:pb-16">
         <div className="w-full">
           <div
             className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
