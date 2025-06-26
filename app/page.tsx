@@ -339,11 +339,46 @@ export default function LucyScottHair() {
                 <p className="text-center text-[#4E4A47] mb-6 font-light italic">
                   Appointments are available by booking only. Our salon operates on Tuesdays and Thursdays, with flexible scheduling to accommodate your needs. Please contact us to discuss your requirements and check availability.
                 </p>
+                {/* Hidden form for Netlify form detection */}
                 <form 
                   name="contact" 
                   method="POST" 
                   data-netlify="true"
+                  hidden
+                >
+                  <input type="text" name="name" />
+                  <input type="tel" name="contact-number" />
+                  <input type="date" name="preferred-date" />
+                  <input type="time" name="preferred-time" />
+                  <textarea name="enquiry"></textarea>
+                </form>
+                
+                {/* Actual form that users interact with */}
+                <form 
+                  name="contact" 
+                  method="POST" 
+                  action="/contact-success"
                   className="space-y-6"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const form = e.target as HTMLFormElement;
+                    const formData = new FormData(form);
+                    formData.append('form-name', 'contact');
+                    
+                    fetch('/', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                      body: new URLSearchParams(formData as any).toString()
+                    })
+                    .then(() => {
+                      alert('Thank you for your enquiry! We\'ll get back to you soon.');
+                      form.reset();
+                    })
+                    .catch((error) => {
+                      alert('Sorry, there was an error sending your message. Please try again or contact us directly.');
+                      console.error('Form submission error:', error);
+                    });
+                  }}
                 >
                   <input type="hidden" name="form-name" value="contact" />
                   

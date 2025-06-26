@@ -8,3 +8,22 @@
 # Static export configuration for Next.js
 [context.production.environment]
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+# Form handling and notifications
+[[forms]]
+  name = "contact"
+  
+# Headers for security and form handling
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/public/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
