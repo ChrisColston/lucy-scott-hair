@@ -18,6 +18,11 @@ export default function LucyScottHair() {
 
   useEffect(() => {
     setIsVisible(true)
+    // Clear form fields on page load/refresh
+    const dateInput = document.getElementById('preferred-date') as HTMLInputElement;
+    const timeInput = document.getElementById('preferred-time') as HTMLInputElement;
+    if (dateInput) dateInput.value = '';
+    if (timeInput) timeInput.value = '';
   }, [])
 
   return (
@@ -373,6 +378,11 @@ export default function LucyScottHair() {
                     .then(() => {
                       alert('Thank you for your enquiry! We\'ll get back to you soon.');
                       form.reset();
+                      // Ensure date and time fields are completely cleared
+                      const dateInput = form.querySelector('#preferred-date') as HTMLInputElement;
+                      const timeInput = form.querySelector('#preferred-time') as HTMLInputElement;
+                      if (dateInput) dateInput.value = '';
+                      if (timeInput) timeInput.value = '';
                     })
                     .catch((error) => {
                       alert('Sorry, there was an error sending your message. Please try again or contact us directly.');
@@ -572,15 +582,16 @@ export default function LucyScottHair() {
                   </button>
                   <button
                     onClick={() => {
+                      const imageUrl = `${window.location.origin}/LucyScott_Hair_Concept-10-LUCY%20SCOTT%20-%20Price%20List-2.png`;
                       if (navigator.share) {
                         navigator.share({
-                          title: 'Lucy Scott • Hair • Hair Styling in Flushing, Cornwall',
-                          text: 'Professional hair cutting, colouring, and styling services for all ages and genders in Flushing, Cornwall.',
-                          url: window.location.href
+                          title: 'Lucy Scott Hair - Price List',
+                          text: 'Check out our current prices for professional hair cutting, colouring, and styling services.',
+                          url: imageUrl
                         });
                       } else {
-                        navigator.clipboard.writeText(window.location.href);
-                        alert('Link copied to clipboard!');
+                        navigator.clipboard.writeText(imageUrl);
+                        alert('Price list image link copied to clipboard!');
                       }
                     }}
                     className="w-10 h-10 rounded-full border-2 border-[#E5D5C8] flex items-center justify-center hover:bg-[#F8E5E8] transition-colors"
@@ -638,9 +649,9 @@ export default function LucyScottHair() {
                 <h4 className="font-black text-[#4E4A47] mb-2">Flushing Village Club</h4>
                 <p className="text-[#333333] text-sm">Coventry Road, Flushing, Cornwall, TR11 5TY</p>
               </div>
-              <div className="w-full h-96 rounded-lg overflow-hidden">
+              <div className="w-full h-[450px] rounded-lg overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2530.123456789!2d-5.075341!3d50.159123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486ab6e5b5b5b5b5%3A0x123456789abcdef!2sFlushing%20Village%20Club%2C%20Coventry%20Road%2C%20Flushing%2C%20Cornwall%20TR11%205TY!5e0!3m2!1sen!2suk!4v1703995200000!5m2!1sen!2suk"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d638.9612428028489!2d-5.070917330291101!3d50.16403595732194!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486b3d32734367bb%3A0x7f64b1a9d60aca64!2sFlushing%20Village%20Club!5e0!3m2!1sen!2suk!4v1751034258844!5m2!1sen!2suk"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
