@@ -640,7 +640,7 @@ export default function LucyScottHair() {
               </div>
               <div className="w-full h-96 rounded-lg overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2534.123456789!2d-5.070123!3d50.159456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486ab6e4b5d5e5e5%3A0x123456789!2sFlushing%20Village%20Club%2C%20Coventry%20Rd%2C%20Flushing%2C%20Falmouth%20TR11%205TY!5e0!3m2!1sen!2suk!4v1640995200000!5m2!1sen!2suk"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2530.8!2d-5.074749!3d50.158789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486ab6f5a5a5a5a5%3A0x5e5e5e5e5e5e5e5e!2sFlushing%20Village%20Club%2C%20Coventry%20Rd%2C%20Flushing%2C%20Falmouth%20TR11%205TY%2C%20UK!5e0!3m2!1sen!2suk!4v1703772000000!5m2!1sen!2suk"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
