@@ -21,7 +21,7 @@ export default function LucyScottHair() {
   }, [])
 
   return (
-    <div className="min-h-screen gradient-background m-0 p-0">
+    <div className="min-h-screen animated-gradient-bg m-0 p-0">
       {/* Pure CSS Gradient Background Animation - Full Viewport */}
 
       {/* Header - Sticky with Glass Effect - Higher padding for mobile */}
@@ -147,7 +147,7 @@ export default function LucyScottHair() {
               />
               {/* Prominent Tagline Overlay - Moved up 30% */}
               <div className="absolute inset-0 flex flex-col items-center justify-center transform -translate-y-[30%]">
-                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide text-center px-4 hero-text mb-4 linear-wipe">
+                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide text-center px-4 hero-text mb-4 animated-text-gradient">
                   Every Style, Every Story
                 </h1>
                 <h2 className="body-font text-xl md:text-2xl text-[#4E4A47] text-center px-4 font-medium">
@@ -640,7 +640,7 @@ export default function LucyScottHair() {
               </div>
               <div className="w-full h-96 rounded-lg overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2530.8!2d-5.074749!3d50.158789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486ab6f5a5a5a5a5%3A0x5e5e5e5e5e5e5e5e!2sFlushing%20Village%20Club%2C%20Coventry%20Rd%2C%20Flushing%2C%20Falmouth%20TR11%205TY%2C%20UK!5e0!3m2!1sen!2suk!4v1703772000000!5m2!1sen!2suk"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2530.123456789!2d-5.075341!3d50.159123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486ab6e5b5b5b5b5%3A0x123456789abcdef!2sFlushing%20Village%20Club%2C%20Coventry%20Road%2C%20Flushing%2C%20Cornwall%20TR11%205TY!5e0!3m2!1sen!2suk!4v1703995200000!5m2!1sen!2suk"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}

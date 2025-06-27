@@ -93,14 +93,14 @@ body {
   }
 }
 
-/* Animated gradient background */
-.gradient-background {
-  background: linear-gradient(-45deg, #FDF5EA, #F8E5E8, #E5D5C8, #D8A7B1, #FDF5EA);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+/* FORCE FIX: Animated gradient background with stronger animation */
+.animated-gradient-bg {
+  background: linear-gradient(-45deg, #FDF5EA, #F8E5E8, #E5D5C8, #D8A7B1, #C1A57B, #FDF5EA);
+  background-size: 600% 600%;
+  animation: backgroundShift 12s ease-in-out infinite !important;
 }
 
-@keyframes gradientShift {
+@keyframes backgroundShift {
   0% {
     background-position: 0% 50%;
   }
@@ -108,33 +108,36 @@ body {
     background-position: 100% 50%;
   }
   50% {
-    background-position: 50% 100%;
+    background-position: 100% 100%;
   }
   75% {
-    background-position: 0% 50%;
+    background-position: 0% 100%;
   }
   100% {
     background-position: 0% 50%;
   }
 }
 
-/* Animated text gradient */
-.linear-wipe {
-  background: linear-gradient(90deg, #4E4A47 20%, #D8A7B1 40%, #E5D5C8 60%, #4E4A47 80%);
-  background-size: 200% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shine 8s linear infinite;
+/* FORCE FIX: Animated text gradient with stronger effect */
+.animated-text-gradient {
+  background: linear-gradient(90deg, #4E4A47 0%, #D8A7B1 25%, #E5D5C8 50%, #C1A57B 75%, #4E4A47 100%);
+  background-size: 300% 100%;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: textShine 6s linear infinite !important;
 }
 
-@keyframes shine {
+@keyframes textShine {
   0% {
-    background-position: 0% center;
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
   100% {
-    background-position: 200% center;
+    background-position: 0% 50%;
   }
 }
 
