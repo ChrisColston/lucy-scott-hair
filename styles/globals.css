@@ -4,6 +4,10 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(-45deg, #FDF5EA, #F8E5D6, #FDF5EA, #F8E5D6);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  height: 100vh;
 }
 
 @layer utilities {
@@ -93,17 +97,8 @@ body {
   }
 }
 
-/* DEFINITIVE BACKGROUND ANIMATION - Base color #FDF5EA */
-.animated-gradient-bg {
-  background: #FDF5EA !important;
-  background: linear-gradient(-45deg, #FDF5EA 0%, #F8E5E8 25%, #E5D5C8 50%, #D8A7B1 75%, #FDF5EA 100%) !important;
-  background-size: 400% 400% !important;
-  animation: moveGradient 8s ease infinite !important;
-  min-height: 100vh !important;
-  width: 100% !important;
-}
-
-@keyframes moveGradient {
+/* BODY BACKGROUND ANIMATION - Your Final Version */
+@keyframes gradient {
   0% {
     background-position: 0% 50%;
   }
@@ -115,23 +110,26 @@ body {
   }
 }
 
-/* DEFINITIVE TEXT GRADIENT ANIMATION */
-.animated-text-gradient {
-  background: linear-gradient(90deg, #4E4A47 0%, #D8A7B1 25%, #E5D5C8 50%, #C1A57B 75%, #4E4A47 100%) !important;
-  background-size: 200% auto !important;
-  color: transparent !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
-  animation: textShimmer 3s linear infinite !important;
-  display: inline-block !important;
+/* REMOVE OLD BACKGROUND CLASS - Now uses body background */
+.animated-gradient-bg {
+  background: transparent !important;
 }
 
-@keyframes textShimmer {
-  0% {
-    background-position: 0% center;
-  }
-  100% {
+/* TEXT GRADIENT ANIMATION - Your Linear Wipe Version */
+.linear-wipe {
+  text-align: center;
+  background: linear-gradient(to right, #4E4A47 20%, #FFF 40%, #FFF 60%, #CCA3A3 80%);
+  background-size: 200% auto;
+  color: #000;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 10s linear infinite;
+}
+
+@keyframes shine {
+  to {
     background-position: 200% center;
   }
 }
