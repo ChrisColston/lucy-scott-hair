@@ -93,59 +93,46 @@ body {
   }
 }
 
-/* ULTRA FORCE FIX: Background animation with maximum visibility */
+/* DEFINITIVE BACKGROUND ANIMATION - Base color #FDF5EA */
 .animated-gradient-bg {
-  background: linear-gradient(-45deg, #FDF5EA, #F8E5E8, #E5D5C8, #D8A7B1, #C1A57B, #F0D0A0, #FDF5EA) !important;
-  background-size: 800% 800% !important;
-  animation: ultraBackgroundShift 10s ease-in-out infinite !important;
-  min-height: 100vh !important;
-}
-
-@keyframes ultraBackgroundShift {
-  0% {
-    background-position: 0% 0%;
-  }
-  25% {
-    background-position: 100% 0%;
-  }
-  50% {
-    background-position: 100% 100%;
-  }
-  75% {
-    background-position: 0% 100%;
-  }
-  100% {
-    background-position: 0% 0%;
-  }
-}
-
-/* ULTRA FORCE FIX: Text gradient with maximum effect */
-.animated-text-gradient {
-  background: linear-gradient(45deg, #4E4A47 0%, #D8A7B1 20%, #E5D5C8 40%, #C1A57B 60%, #8B4513 80%, #4E4A47 100%) !important;
+  background: #FDF5EA !important;
+  background: linear-gradient(-45deg, #FDF5EA 0%, #F8E5E8 25%, #E5D5C8 50%, #D8A7B1 75%, #FDF5EA 100%) !important;
   background-size: 400% 400% !important;
-  color: transparent !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
-  animation: ultraTextShine 5s linear infinite !important;
-  display: inline-block !important;
+  animation: moveGradient 8s ease infinite !important;
+  min-height: 100vh !important;
+  width: 100% !important;
 }
 
-@keyframes ultraTextShine {
+@keyframes moveGradient {
   0% {
     background-position: 0% 50%;
-  }
-  25% {
-    background-position: 50% 0%;
   }
   50% {
     background-position: 100% 50%;
   }
-  75% {
-    background-position: 50% 100%;
-  }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+/* DEFINITIVE TEXT GRADIENT ANIMATION */
+.animated-text-gradient {
+  background: linear-gradient(90deg, #4E4A47 0%, #D8A7B1 25%, #E5D5C8 50%, #C1A57B 75%, #4E4A47 100%) !important;
+  background-size: 200% auto !important;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  animation: textShimmer 3s linear infinite !important;
+  display: inline-block !important;
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
   }
 }
 

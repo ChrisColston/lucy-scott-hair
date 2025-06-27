@@ -443,7 +443,11 @@ export default function LucyScottHair() {
                         type="time"
                         id="preferred-time"
                         name="preferred-time"
+                        min="09:00"
+                        max="17:00"
+                        step="900"
                         className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px]"
+                        placeholder="Select time"
                       />
                     </div>
                   </div>

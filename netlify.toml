@@ -13,21 +13,11 @@
 [[forms]]
   name = "contact"
 
-# Form notifications - send to email
-[[forms]]
-  name = "contact"
-  action = "/contact-success"
-  
-  # Email notification settings
-  [forms.settings]
-    to = "bookings@lucyscotthair.co.uk"
-    subject = "New Booking Enquiry - Lucy Scott Hair"
-    from = "Lucy Scott Hair <noreply@lucyscotthair.co.uk>"
-    
-  # Custom email template
-  [forms.notification]
-    type = "email"
-    to = "bookings@lucyscotthair.co.uk"
+# Email notification (will need to be configured in Netlify dashboard)
+# Go to Site Settings > Forms > Form notifications
+# Add email notification with:
+# - Email: bookings@lucyscotthair.co.uk
+# - Subject: New Booking Enquiry - Lucy Scott Hair
   
 # Headers for security and form handling
 [[headers]]
