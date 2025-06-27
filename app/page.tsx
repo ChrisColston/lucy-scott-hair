@@ -23,6 +23,39 @@ export default function LucyScottHair() {
     const timeInput = document.getElementById('preferred-time') as HTMLInputElement;
     if (dateInput) dateInput.value = '';
     if (timeInput) timeInput.value = '';
+    
+    // FORCE INJECT ANIMATIONS DIRECTLY INTO HEAD
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes gradientAnimation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      
+      @keyframes textShineAnimation {
+        0% { background-position: 0% center; }
+        100% { background-position: 200% center; }
+      }
+      
+      body {
+        background: linear-gradient(-45deg, #FDF5EA, #F8E5D6, #FDF5EA, #F8E5D6) !important;
+        background-size: 400% 400% !important;
+        animation: gradientAnimation 15s ease infinite !important;
+      }
+      
+      .hero-text-animated {
+        background: linear-gradient(to right, #4E4A47 20%, #FFF 40%, #FFF 60%, #CCA3A3 80%) !important;
+        background-size: 200% auto !important;
+        color: transparent !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        animation: textShineAnimation 10s linear infinite !important;
+        display: inline-block !important;
+      }
+    `;
+    document.head.appendChild(style);
   }, [])
 
   return (
@@ -152,7 +185,7 @@ export default function LucyScottHair() {
               />
               {/* Prominent Tagline Overlay - Moved up 30% */}
               <div className="absolute inset-0 flex flex-col items-center justify-center transform -translate-y-[30%]">
-                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide text-center px-4 hero-text mb-4 linear-wipe">
+                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide text-center px-4 hero-text mb-4 hero-text-animated">
                   Every Style, Every Story
                 </h1>
                 <h2 className="body-font text-xl md:text-2xl text-[#4E4A47] text-center px-4 font-medium">
