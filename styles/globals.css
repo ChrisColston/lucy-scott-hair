@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(-45deg, #FDF5EA, #F8E5D6, #FDF5EA, #F8E5D6);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-  height: 100vh;
+  font-family: Arial, Helvetica, sans-serif !important;
+  background: linear-gradient(-45deg, #FDF5EA, #F8E5D6, #FDF5EA, #F8E5D6) !important;
+  background-size: 400% 400% !important;
+  animation: gradient 15s ease infinite !important;
+  height: 100vh !important;
 }
 
 @layer utilities {
@@ -93,7 +93,7 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 }
 
@@ -115,17 +115,18 @@ body {
   background: transparent !important;
 }
 
-/* TEXT GRADIENT ANIMATION - Your Linear Wipe Version */
+/* TEXT GRADIENT ANIMATION - Your Linear Wipe Version - FORCE OVERRIDE */
 .linear-wipe {
-  text-align: center;
-  background: linear-gradient(to right, #4E4A47 20%, #FFF 40%, #FFF 60%, #CCA3A3 80%);
-  background-size: 200% auto;
-  color: #000;
-  background-clip: text;
-  text-fill-color: transparent;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shine 10s linear infinite;
+  text-align: center !important;
+  background: linear-gradient(to right, #4E4A47 20%, #FFF 40%, #FFF 60%, #CCA3A3 80%) !important;
+  background-size: 200% auto !important;
+  color: transparent !important;
+  background-clip: text !important;
+  text-fill-color: transparent !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: shine 10s linear infinite !important;
+  display: inline-block !important;
 }
 
 @keyframes shine {
