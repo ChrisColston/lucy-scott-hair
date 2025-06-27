@@ -34,7 +34,7 @@ export default function LucyScottHair() {
       }
       
       @keyframes textShineAnimation {
-        0% { background-position: 0% center; }
+        0% { background-position: -200% center; }
         100% { background-position: 200% center; }
       }
       
@@ -45,14 +45,15 @@ export default function LucyScottHair() {
       }
       
       .hero-text-animated {
-        background: linear-gradient(to right, #4E4A47 20%, #FFF 40%, #FFF 60%, #CCA3A3 80%) !important;
-        background-size: 200% auto !important;
+        background: linear-gradient(90deg, #4E4A47 0%, #FFF 25%, #CCA3A3 50%, #FFF 75%, #4E4A47 100%) !important;
+        background-size: 400% 100% !important;
         color: transparent !important;
         -webkit-background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
         background-clip: text !important;
-        animation: textShineAnimation 10s linear infinite !important;
+        animation: textShineAnimation 8s ease-in-out infinite !important;
         display: inline-block !important;
+        text-align: center !important;
       }
     `;
     document.head.appendChild(style);
@@ -188,7 +189,7 @@ export default function LucyScottHair() {
                 <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide text-center px-4 hero-text mb-4 hero-text-animated">
                   Every Style, Every Story
                 </h1>
-                <h2 className="body-font text-xl md:text-2xl text-[#4E4A47] text-center px-4 font-medium">
+                <h2 className="body-font text-xl md:text-2xl text-[#4E4A47] text-center px-4 font-thin italic">
                   Where creativity meets craftsmanship
                 </h2>
               </div>
