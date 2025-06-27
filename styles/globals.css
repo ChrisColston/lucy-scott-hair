@@ -92,3 +92,47 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Animated gradient background */
+.gradient-background {
+  background: linear-gradient(270deg, #FDF5EA, #F8E5E8, #FDF5EA, #E5D5C8);
+  background-size: 800% 800%;
+  animation: gradientShift 12s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Custom button styles */
+.lucy-button {
+  @apply bg-transparent border-2 border-[#E5D5C8] text-[#4E4A47] hover:bg-[#E5D5C8] hover:text-[#333333] transition-all duration-300 rounded-[30px] font-medium;
+}
+
+/* Typography styles */
+.heading-font {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.body-font {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.body-font-light {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 300;
+}
+
+.nav-font {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+  color: #4E4A47;
+}

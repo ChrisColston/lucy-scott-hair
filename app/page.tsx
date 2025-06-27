@@ -130,7 +130,7 @@ export default function LucyScottHair() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-40 md:pt-24 pb-8 md:pb-16">
+      <section className="pt-48 md:pt-24 pb-12 md:pb-16">
         <div className="w-full">
           <div
             className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -178,7 +178,7 @@ export default function LucyScottHair() {
             <div className="max-w-4xl mx-auto text-center">
               <h3 className="text-3xl md:text-4xl font-black text-[#4E4A47] mb-8 tracking-wide">About</h3>
 
-              <div className="bg-white/70 backdrop-blur-sm rounded-[20px] p-8 md:p-12 shadow-lg border-4 border-[#F8E5E8]">
+              <div className="bg-white/70 backdrop-blur-sm rounded-[20px] p-8 md:p-12 shadow-lg border-4 border-[#E5D5C8]">
                 {/* Circular Avatar Placeholder */}
                 <div className="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6 bg-[#F8E5E8] rounded-full border-4 border-[#D8A7B1] shadow-lg flex items-center justify-center">
                   <svg className="w-12 h-12 md:w-16 md:h-16 text-[#4E4A47]" fill="currentColor" viewBox="0 0 24 24">
@@ -334,7 +334,7 @@ export default function LucyScottHair() {
               <h3 className="text-3xl md:text-4xl font-black text-[#333333] mb-8 tracking-wide">Get In Touch</h3>
 
               {/* Contact Form */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-[10px] p-8 md:p-12 shadow-lg border-4 border-[#F8E5E8] mb-8">
+              <div className="bg-white/70 backdrop-blur-sm rounded-[10px] p-8 md:p-12 shadow-lg border-4 border-[#E5D5C8] mb-8">
                 <h4 className="text-2xl font-black text-[#4E4A47] mb-4 text-center">Send us an Enquiry</h4>
                 <p className="text-center text-[#4E4A47] mb-6 font-light italic">
                   Appointments are available by booking only. Our salon operates on Tuesdays and Thursdays, with flexible scheduling to accommodate your needs. Please contact us to discuss your requirements and check availability.
@@ -465,7 +465,7 @@ export default function LucyScottHair() {
               </div>
 
               {/* Contact Information */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-[20px] p-8 md:p-12 shadow-lg border-4 border-[#F8E5E8]">
+              <div className="bg-white/70 backdrop-blur-sm rounded-[20px] p-8 md:p-12 shadow-lg border-4 border-[#E5D5C8]">
                 <h4 className="text-2xl font-black text-[#333333] mb-6 text-center">Contact Information</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                   <div className="flex flex-col items-center">
@@ -550,7 +550,7 @@ export default function LucyScottHair() {
             {/* Modal Header */}
               <div className="flex justify-between items-center p-6 border-b border-[#F8E5E8] bg-[#FDF5EA]">
                 <h3 className="text-2xl font-black text-[#4E4A47]">Price List</h3>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center gap-6">
                   <button
                     onClick={() => {
                       const printWindow = window.open('', '_blank');
@@ -565,10 +565,10 @@ export default function LucyScottHair() {
                       printWindow.document.close();
                       printWindow.print();
                     }}
-                    className="text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors p-2"
+                    className="w-10 h-10 rounded-full border-2 border-[#E5D5C8] flex items-center justify-center hover:bg-[#F8E5E8] transition-colors"
                     title="Print"
                   >
-                    <Printer className="w-5 h-5" />
+                    <Printer className="w-4 h-4 text-[#E5D5C8]" strokeWidth={2} />
                   </button>
                   <button
                     onClick={() => {
@@ -583,10 +583,10 @@ export default function LucyScottHair() {
                         alert('Link copied to clipboard!');
                       }
                     }}
-                    className="text-[#4E4A47] hover:text-[#D8A7B1] hover:bg-[#F8E5E8] rounded-full transition-colors p-2"
+                    className="w-10 h-10 rounded-full border-2 border-[#E5D5C8] flex items-center justify-center hover:bg-[#F8E5E8] transition-colors"
                     title="Share"
                   >
-                    <Share2 className="w-5 h-5" />
+                    <Share2 className="w-4 h-4 text-[#E5D5C8]" strokeWidth={2} />
                   </button>
                 </div>
               </div>
@@ -640,7 +640,7 @@ export default function LucyScottHair() {
               </div>
               <div className="w-full h-96 rounded-lg overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2530.1234567890123!2d-5.0987654321098765!3d50.1234567890123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sFlushing%20Village%20Club%2C%20Coventry%20Road%2C%20Flushing%2C%20Cornwall%20TR11%205TY!5e0!3m2!1sen!2suk!4v1234567890123!5m2!1sen!2suk"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2534.123456789!2d-5.070123!3d50.159456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486ab6e4b5d5e5e5%3A0x123456789!2sFlushing%20Village%20Club%2C%20Coventry%20Rd%2C%20Flushing%2C%20Falmouth%20TR11%205TY!5e0!3m2!1sen!2suk!4v1640995200000!5m2!1sen!2suk"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
