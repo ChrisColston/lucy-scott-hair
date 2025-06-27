@@ -147,7 +147,7 @@ export default function LucyScottHair() {
               />
               {/* Prominent Tagline Overlay - Moved up 30% */}
               <div className="absolute inset-0 flex flex-col items-center justify-center transform -translate-y-[30%]">
-                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold text-[#4E4A47] tracking-wide text-center px-4 hero-text mb-4">
+                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide text-center px-4 hero-text mb-4 linear-wipe">
                   Every Style, Every Story
                 </h1>
                 <h2 className="body-font text-xl md:text-2xl text-[#4E4A47] text-center px-4 font-medium">
@@ -550,7 +550,7 @@ export default function LucyScottHair() {
             {/* Modal Header */}
               <div className="flex justify-between items-center p-6 border-b border-[#F8E5E8] bg-[#FDF5EA]">
                 <h3 className="text-2xl font-black text-[#4E4A47]">Price List</h3>
-                <div className="flex items-center gap-6 pr-5">
+                <div className="flex items-center gap-6 pr-10">
                   <button
                     onClick={() => {
                       const printWindow = window.open('', '_blank');

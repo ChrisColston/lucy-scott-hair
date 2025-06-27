@@ -95,20 +95,46 @@ body {
 
 /* Animated gradient background */
 .gradient-background {
-  background: linear-gradient(270deg, #FDF5EA, #F8E5E8, #FDF5EA, #E5D5C8);
-  background-size: 800% 800%;
-  animation: gradientShift 12s ease infinite;
+  background: linear-gradient(-45deg, #FDF5EA, #F8E5E8, #E5D5C8, #D8A7B1, #FDF5EA);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
 }
 
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
   }
-  50% {
+  25% {
     background-position: 100% 50%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  75% {
+    background-position: 0% 50%;
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+/* Animated text gradient */
+.linear-wipe {
+  background: linear-gradient(90deg, #4E4A47 20%, #D8A7B1 40%, #E5D5C8 60%, #4E4A47 80%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 8s linear infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
   }
 }
 
