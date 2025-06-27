@@ -550,7 +550,7 @@ export default function LucyScottHair() {
             {/* Modal Header */}
               <div className="flex justify-between items-center p-6 border-b border-[#F8E5E8] bg-[#FDF5EA]">
                 <h3 className="text-2xl font-black text-[#4E4A47]">Price List</h3>
-                <div className="flex items-center justify-center gap-6">
+                <div className="flex items-center gap-6 pr-5">
                   <button
                     onClick={() => {
                       const printWindow = window.open('', '_blank');
