@@ -168,7 +168,7 @@ export default function LucyScottHair() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-48 md:pt-24 pb-12 md:pb-16">
+      <section className="pb-12 md:pb-16" style={{paddingTop: 'calc(12rem + 50px)'}}>
         <div className="w-full">
           <div
             className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -185,7 +185,7 @@ export default function LucyScottHair() {
               />
               {/* Prominent Tagline Overlay - Moved up 30% */}
               <div className="absolute inset-0 flex flex-col items-center justify-center transform -translate-y-[30%]">
-                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide text-center px-4 hero-text mb-4 hero-text-animated">
+                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide text-center px-4 mb-4 hero-text-animated" style={{textShadow: 'none', WebkitTextStroke: 'none'}}>
                   Every Style, Every Story
                 </h1>
                 <h2 className="body-font text-xl md:text-2xl text-[#4E4A47] text-center px-4 font-extralight italic">
@@ -194,7 +194,7 @@ export default function LucyScottHair() {
               </div>
             </div>
 
-            <div className="container mx-auto text-center">
+            <div className="container mx-auto text-center" style={{marginTop: '50px'}}>
               <p className="text-xl md:text-2xl text-[#4E4A47] max-w-3xl mx-auto mb-12 leading-relaxed font-light">
                 Professional cuts, colour, and styling for all ages and genders in the heart of Flushing, Cornwall
               </p>
