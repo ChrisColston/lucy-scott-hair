@@ -15,14 +15,26 @@ export default function LucyScottHair() {
   const [showPriceModal, setShowPriceModal] = useState(false)
   const [showMapModal, setShowMapModal] = useState(false)
   const [showCookieBanner, setShowCookieBanner] = useState(true)
+  const [selectedTime, setSelectedTime] = useState('')
+  
+  // Generate time slots in 15-minute increments from 9:00 to 17:00
+  const timeSlots = []
+  for (let hour = 9; hour <= 17; hour++) {
+    for (let minute = 0; minute < 60; minute += 15) {
+      if (hour === 17 && minute > 0) break; // Stop at 17:00
+      const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+      timeSlots.push(timeString)
+    }
+  }
 
   useEffect(() => {
     setIsVisible(true)
     // Clear form fields on page load/refresh
     const dateInput = document.getElementById('preferred-date') as HTMLInputElement;
-    const timeInput = document.getElementById('preferred-time') as HTMLInputElement;
+    const timeInput = document.getElementById('preferred-time') as HTMLSelectElement;
     if (dateInput) dateInput.value = '';
     if (timeInput) timeInput.value = '';
+    setSelectedTime('');
     
     // FORCE INJECT ANIMATIONS DIRECTLY INTO HEAD
     const style = document.createElement('style');
@@ -416,6 +428,7 @@ export default function LucyScottHair() {
                       const timeInput = form.querySelector('#preferred-time') as HTMLInputElement;
                       if (dateInput) dateInput.value = '';
                       if (timeInput) timeInput.value = '';
+                      setSelectedTime('');
                     })
                     .catch((error) => {
                       alert('Sorry, there was an error sending your message. Please try again or contact us directly.');
@@ -472,16 +485,20 @@ export default function LucyScottHair() {
                     <label htmlFor="preferred-time" className="text-left block text-sm font-black text-[#4E4A47] mb-2">
                       Preferred Appointment Time
                     </label>
-                      <Input
-                        type="time"
+                      <select
                         id="preferred-time"
                         name="preferred-time"
-                        min="09:00"
-                        max="17:00"
-                        step="900"
-                        className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px]"
-                        placeholder="Select time"
-                      />
+                        value={selectedTime}
+                        onChange={(e) => setSelectedTime(e.target.value)}
+                        className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px] px-3 py-2 bg-white"
+                      >
+                        <option value="">Select time</option>
+                        {timeSlots.map((time) => (
+                          <option key={time} value={time}>
+                            {time}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                   
