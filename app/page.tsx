@@ -490,7 +490,13 @@ export default function LucyScottHair() {
                         name="preferred-time"
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
-                        className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px] px-3 py-2 bg-white"
+                        className="w-full border-2 border-[#F8E5E8] focus:border-[#D8A7B1] rounded-[12px] px-3 py-2 bg-white text-base font-normal text-[#4E4A47] appearance-none cursor-pointer hover:border-[#D8A7B1] transition-colors"
+                        style={{
+                          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                          fontSize: '16px',
+                          lineHeight: '1.5',
+                          height: '42px'
+                        }}
                       >
                         <option value="">Select time</option>
                         {timeSlots.map((time) => (
