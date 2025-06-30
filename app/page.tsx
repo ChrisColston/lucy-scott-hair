@@ -17,10 +17,11 @@ export default function LucyScottHair() {
   const [showCookieBanner, setShowCookieBanner] = useState(true)
   const [selectedTime, setSelectedTime] = useState('')
   
-  // Generate time slots in 15-minute increments from 9:00 to 17:00
+  // Generate time slots in 15-minute increments from 9:30 to 17:00
   const timeSlots = []
   for (let hour = 9; hour <= 17; hour++) {
     for (let minute = 0; minute < 60; minute += 15) {
+      if (hour === 9 && minute < 30) continue; // Start from 9:30
       if (hour === 17 && minute > 0) break; // Stop at 17:00
       const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
       timeSlots.push(timeString)
@@ -112,7 +113,10 @@ export default function LucyScottHair() {
               >
                 <Instagram className="w-5 h-5" />
               </a>
-              <button className="lucy-button">
+              <button 
+                onClick={() => window.open('https://calendly.com/lucyscotthair', '_blank')}
+                className="lucy-button"
+              >
                 Book Now
               </button>
             </nav>
@@ -170,7 +174,10 @@ export default function LucyScottHair() {
                   <Instagram className="w-5 h-5" />
                   Instagram
                 </a>
-                <button className="lucy-button text-sm px-6 py-2">
+                <button 
+                  onClick={() => window.open('https://calendly.com/lucyscotthair', '_blank')}
+                  className="lucy-button text-sm px-6 py-2"
+                >
                   Book Now
                 </button>
               </nav>
@@ -211,7 +218,10 @@ export default function LucyScottHair() {
                 Professional cuts, colour, and styling for all ages and genders in the heart of Flushing, Cornwall
               </p>
 
-              <button className="lucy-button px-12 py-6 text-lg font-light tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <button 
+                onClick={() => window.open('https://calendly.com/lucyscotthair', '_blank')}
+                className="lucy-button px-12 py-6 text-lg font-light tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
                 Book Now
               </button>
             </div>
@@ -303,13 +313,13 @@ export default function LucyScottHair() {
                   <div className="w-12 h-12 bg-[#D8A7B1] rounded-full flex items-center justify-center mx-auto mb-4">
                     <Scissors className="w-6 h-6 text-[#4E4A47]" />
                   </div>
-                  <CardTitle className="text-xl font-black text-[#4E4A47]">Cut & Style</CardTitle>
+                  <CardTitle className="text-xl font-black text-[#4E4A47]">Cutting & Styling</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
                   <p className="text-[#4E4A47] mb-4 font-light italic">
-                    Professional cuts tailored to your face shape and lifestyle
+                    Professional cuts tailored to you and your lifestyle
                   </p>
-                  <p className="text-2xl font-black text-[#4E4A47]">From £25</p>
+                  <p className="text-2xl font-black text-[#4E4A47]">From £20</p>
                 </CardContent>
               </Card>
 
@@ -322,7 +332,7 @@ export default function LucyScottHair() {
                 </CardHeader>
                 <CardContent className="text-center">
                   <p className="text-[#4E4A47] mb-4 font-light italic">
-                    Full colour, highlights, balayage, and colour corrections + free 15min consultation
+                    Full colour application, highlights/lowlights, balayage, and colour corrections + free 15min consultation
                   </p>
                   <p className="text-2xl font-black text-[#4E4A47]">From £65</p>
                 </CardContent>
@@ -582,9 +592,12 @@ export default function LucyScottHair() {
                 </div>
 
                 <div className="space-y-4 text-center">
-                  <button className="lucy-button px-12 py-6 text-lg font-light tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2 mx-auto">
+                  <button 
+                    onClick={() => window.open('https://calendly.com/lucyscotthair', '_blank')}
+                    className="lucy-button px-12 py-6 text-lg font-light tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2 mx-auto"
+                  >
                     <Calendar className="w-5 h-5" />
-                    Availability
+                    Check Availability
                   </button>
 
                   <p className="text-sm text-[#4E4A47]/70 mt-4 font-light italic">
