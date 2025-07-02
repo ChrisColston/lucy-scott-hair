@@ -192,24 +192,41 @@ export default function LucyScottHair() {
           <div
             className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
-            {/* Full-width Hair Wave with Parallax Tagline Overlay */}
-            <div className="relative w-full mb-12 -mx-4 md:-mx-8">
-              <Image
-                src="/lucy-scott-hair-wave.png"
-                alt="Flowing hair design"
-                width={1200}
-                height={600}
-                className="w-full h-auto opacity-80"
-                priority
-              />
-              {/* Prominent Tagline Overlay - Moved up 30% */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center transform -translate-y-[30%]">
-                <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide text-center px-4 mb-4 hero-text-animated" style={{textShadow: 'none', WebkitTextStroke: 'none'}}>
-                  Every Style, Every Story
-                </h1>
-                <h2 className="body-font text-xl md:text-2xl text-[#4E4A47] text-center px-4 font-extralight italic">
-                  • Where creativity meets craftsmanship •
-                </h2>
+            {/* Full-width Hero Video with Text Overlay */}
+            <div className="relative w-full mb-12 -mx-4 md:-mx-8 overflow-hidden rounded-lg">
+              {/* Video Background */}
+              <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh]">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover"
+                  poster="/lucy-scott-hair-wave.png"
+                >
+                  <source src="/hero-video.mp4" type="video/mp4" />
+                  {/* Fallback to image if video fails */}
+                  <Image
+                    src="/lucy-scott-hair-wave.png"
+                    alt="Lucy Scott Hair - Professional styling"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </video>
+                
+                {/* Video Overlay for Better Text Readability */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30"></div>
+                
+                {/* Text Overlay - Centered */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+                  <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide mb-4 text-white drop-shadow-2xl">
+                    Every Style, Every Story
+                  </h1>
+                  <h2 className="body-font text-xl md:text-2xl text-white/90 font-extralight italic drop-shadow-lg">
+                    • Where creativity meets craftsmanship •
+                  </h2>
+                </div>
               </div>
             </div>
 
