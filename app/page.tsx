@@ -8,6 +8,13 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import { Playfair_Display } from 'next/font/google'
+
+const playfairDisplay = Playfair_Display({
+  weight: ['400', '700', '900'],
+  subsets: ['latin'],
+  display: 'swap'
+})
 
 export default function LucyScottHair() {
   const [isVisible, setIsVisible] = useState(false)
@@ -186,25 +193,85 @@ export default function LucyScottHair() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="pb-12 md:pb-16" style={{paddingTop: 'calc(12rem + 50px)'}}>
+      {/* Hero Section - Full Viewport with Zero Padding */}
+      <section className="pb-0">
         <div className="w-full">
           <div
             className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
-            {/* Full-width Hero Video with Text Overlay */}
-            <div className="relative w-full mb-12 -mx-4 md:-mx-8 overflow-hidden rounded-lg">
-              {/* Video Background */}
-              <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh]">
+            {/* Full-width Hero Video with Text Overlay - No Margins */}
+            <div className="relative w-full overflow-hidden">
+              {/* Video Background - Full Viewport Height */}
+              <div className="relative w-full h-screen">
                 <video
                   autoPlay
                   muted
                   loop
                   playsInline
+                  preload="auto"
+                  controls={false}
+                  disablePictureInPicture
+                  disableRemotePlayback
                   className="absolute inset-0 w-full h-full object-cover"
-                  poster="/lucy-scott-hair-wave.png"
+                  style={{
+                    pointerEvents: 'none',
+                    WebkitUserSelect: 'none',
+                    userSelect: 'none'
+                  }}
+                  onContextMenu={(e) => e.preventDefault()}
+                  ref={(video) => {
+                    if (video) {
+                      // Aggressive autoplay approach
+                      video.muted = true;
+                      video.volume = 0;
+                      video.currentTime = 0;
+                      
+                      // Multiple autoplay attempts
+                      const tryPlay = () => {
+                        const playPromise = video.play();
+                        if (playPromise !== undefined) {
+                          playPromise
+                            .then(() => {
+                              console.log('Video autoplay successful');
+                            })
+                            .catch((error) => {
+                              console.log('Autoplay failed, retrying...', error);
+                              // Retry multiple times
+                              setTimeout(tryPlay, 100);
+                            });
+                        }
+                      };
+                      
+                      // Try immediately
+                      tryPlay();
+                      
+                      // Try on user interaction
+                      const playOnInteraction = () => {
+                        video.play().catch(() => {});
+                        document.removeEventListener('click', playOnInteraction);
+                        document.removeEventListener('touchstart', playOnInteraction);
+                        document.removeEventListener('keydown', playOnInteraction);
+                      };
+                      
+                      document.addEventListener('click', playOnInteraction);
+                      document.addEventListener('touchstart', playOnInteraction);
+                      document.addEventListener('keydown', playOnInteraction);
+                    }
+                  }}
+                  onLoadedData={(e) => {
+                    console.log('Video data loaded');
+                    const video = e.target as HTMLVideoElement;
+                    video.muted = true;
+                    video.play().catch(() => console.log('Play on loaded data failed'));
+                  }}
+                  onCanPlay={(e) => {
+                    console.log('Video can play');
+                    const video = e.target as HTMLVideoElement;
+                    video.play().catch(() => console.log('Play on can play failed'));
+                  }}
+                  onError={(e) => console.error('Video failed to load:', e)}
                 >
-                  <source src="/hero-video.mp4" type="video/mp4" />
+                  <source src="/LucyWebhero.mp4" type="video/mp4" />
                   {/* Fallback to image if video fails */}
                   <Image
                     src="/lucy-scott-hair-wave.png"
@@ -218,14 +285,28 @@ export default function LucyScottHair() {
                 {/* Video Overlay for Better Text Readability */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30"></div>
                 
-                {/* Text Overlay - Centered */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                  <h1 className="heading-font text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide mb-4 text-white drop-shadow-2xl">
-                    Every Style, Every Story
-                  </h1>
-                  <h2 className="body-font text-xl md:text-2xl text-white/90 font-extralight italic drop-shadow-lg">
-                    • Where creativity meets craftsmanship •
-                  </h2>
+                {/* Text Overlay - Moved entire block up closer to navbar */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 -mt-20">
+                  {/* Logo Integration - Halved spacing */}
+                  <div className="mb-3">
+                    <Image
+                      src="/lucy-scott-wordmark.png"
+                      alt="Lucy Scott Hair"
+                      width={300}
+                      height={150}
+                      className="h-auto max-w-[280px] md:max-w-[320px] lg:max-w-[360px]"
+                      priority
+                    />
+                  </div>
+                  {/* Hero text with original spacing from logo */}
+                  <div>
+                    <h1 className={`${playfairDisplay.className} text-5xl md:text-7xl lg:text-8xl font-bold italic tracking-wide mb-4`} style={{color: '#fdf5ea', opacity: 0.7}}>
+                      Every Style, Every Story
+                    </h1>
+                    <h2 className={`${playfairDisplay.className} text-xl md:text-2xl lg:text-3xl font-light italic tracking-wider`} style={{color: '#fdf5ea', opacity: 0.7}}>
+                      • Where creativity meets craftsmanship •
+                    </h2>
+                  </div>
                 </div>
               </div>
             </div>
