@@ -447,7 +447,7 @@ export default function LucyScottHair() {
                   <p className="text-[#4E4A47] mb-4 font-light italic">
                     Traditional and modern barbering services
                   </p>
-                  <p className="text-2xl font-black text-[#4E4A47]">From £25</p>
+                  <p className="text-2xl font-black text-[#4E4A47]">From £20</p>
                 </CardContent>
               </Card>
 
