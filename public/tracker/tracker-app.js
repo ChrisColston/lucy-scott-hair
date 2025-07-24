@@ -113,6 +113,10 @@ class LucyTracker {
                         e.preventDefault();
                         this.switchTab('entries');
                         break;
+                    case '4':
+                        e.preventDefault();
+                        this.switchTab('export');
+                        break;
                 }
             }
         });
