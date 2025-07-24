@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucy Scott Hair - Business Tracker</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#FDF5EA">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Lucy Hair Tracker">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    
+    <!-- Fonts - Same as main site -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+    
+    <style>
+        /* Lucy Scott Hair Brand Styles - Exact Match */
+        :root {
+            --lucy-ivory: #FDF5EA;
+            --lucy-bone: #FAF9F6;
+            --lucy-border: #E5D5C8;
+            --lucy-accent: #D8A7B1;
+            --lucy-text: #4E4A47;
+            --lucy-text-secondary: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-weight: 300;
+            color: var(--lucy-text);
+            background: linear-gradient(-45deg, #FDF5EA, #F8E5D6, #FDF5EA, #F8E5D6);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .heading-font {
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 700;
+            color: var(--lucy-text);
+        }
+
+        .body-font {
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 300;
+            color: var(--lucy-text);
+        }
+
+        .playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Lucy Button - Exact Match */
+        .lucy-button {
+            background-color: var(--lucy-ivory);
+            border: 2px solid var(--lucy-border);
+            border-radius: 12px;
+            color: var(--lucy-text);
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 400;
+            padding: 12px 32px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(78, 74, 71, 0.1);
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .lucy-button:hover {
+            background-color: #F8E5D6;
+            border-color: var(--lucy-accent);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(78, 74, 71, 0.15);
+        }
+
+        .lucy-button.active {
+            background-color: var(--lucy-accent);
+            color: white;
+            border-color: var(--lucy-accent);
+        }
+
+        /* Input Styles - Match main site */
+        .lucy-input, .lucy-select {
+            border: 2px solid #F8E5E8;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 16px;
+            font-family: 'Source Sans 3', sans-serif;
+            transition: border-color 0.3s ease;
+            background: white;
+            width: 100%;
+        }
+
+        .lucy-input:focus, .lucy-select:focus {
+            outline: none;
+            border-color: var(--lucy-accent);
+        }
+
+        /* Card Styles - Match main site */
+        .lucy-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 4px solid var(--lucy-border);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        /* Form Sections */
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Price Display */
+        .price-display {
+            background: rgba(216, 167, 177, 0.1);
+            border: 2px solid var(--lucy-accent);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--lucy-accent);
+            font-size: 1.2rem;
+            margin-top: 12px;
+        }
+
+        /* Entry Items */
+        .entry-item {
+            background: rgba(255, 255, 255, 0.7);
+            border: 2px solid var(--lucy-border);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .entry-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(78, 74, 71, 0.15);
+        }
+
+        .entry-amount.income {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .entry-amount.expense {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            border: 2px solid #c3e6cb;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 24px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--lucy-accent);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--lucy-text);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                min-width: 100%;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* PWA Install Button */
+        .install-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(216, 167, 177, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid var(--lucy-accent);
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="text-center py-8 px-4">
+        <img src="../lucy-scott-wordmark.png" alt="Lucy Scott Hair" class="mx-auto mb-4" style="max-width: 250px; height: auto;">
+        <h1 class="playfair text-4xl md:text-5xl font-bold text-gray-700 mb-2">Business Tracker</h1>
+        <p class="body-font text-lg text-gray-600">Track your income, expenses, and analytics</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-6xl mx-auto px-4 pb-8">
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message">
+            Entry saved successfully!
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="lucy-button nav-tab active" data-tab="entry">New Entry</button>
+            <button class="lucy-button nav-tab" data-tab="dashboard">Dashboard</button>
+            <button class="lucy-button nav-tab" data-tab="entries">Recent Entries</button>
+            <button class="lucy-button nav-tab" data-tab="export">Export</button>
+        </div>
+
+        <!-- Entry Tab -->
+        <div id="entry-tab" class="tab-content active">
+            <div class="lucy-card p-8">
+                <!-- Entry Type Selector -->
+                <div class="flex gap-3 mb-8 flex-wrap">
+                    <button class="lucy-button active flex-1 min-w-[120px]" data-type="haircut" id="haircut-btn">Hair Service</button>
+                    <button class="lucy-button flex-1 min-w-[120px]" data-type="misc" id="misc-btn">Other Income</button>
+                    <button class="lucy-button flex-1 min-w-[120px]" data-type="expense" id="expense-btn">Expense</button>
+                </div>
+
+                <form id="trackerForm">
+                    <!-- Hair Service Section -->
+                    <div class="form-section active" id="haircut-section">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Service Type:</label>
+                                <select id="haircutType" name="haircutType" class="lucy-select" required>
+                                    <option value="">Select a service...</option>
+                                    <optgroup label="CUTS">
+                                        <option value="Dry cut">Dry cut</option>
+                                        <option value="Wet cut">Wet cut</option>
+                                        <option value="Cut and finish">Cut and finish</option>
+                                        <option value="Restyle">Restyle</option>
+                                        <option value="Fringe trim">Fringe trim</option>
+                                    </optgroup>
+                                    <optgroup label="CHILDREN'S CUTS">
+                                        <option value="Children's Dry cut">Children's Dry cut</option>
+                                        <option value="Children's Wet cut">Children's Wet cut</option>
+                                        <option value="Children's Cut and finish">Children's Cut and finish</option>
+                                    </optgroup>
+                                    <optgroup label="STYLING">
+                                        <option value="Blow dry">Blow dry</option>
+                                        <option value="Long hair blow dry">Long hair blow dry</option>
+                                        <option value="Straightening/curling">Straightening/curling</option>
+                                    </optgroup>
+                                    <optgroup label="COLOURING">
+                                        <option value="Consultation - 15min Free">Consultation - 15min Free</option>
+                                        <option value="T-section">T-section</option>
+                                        <option value="Half head">Half head</option>
+                                        <option value="Full head">Full head</option>
+                                        <option value="Full head tint">Full head tint</option>
+                                        <option value="Root tint">Root tint</option>
+                                        <option value="Toner">Toner</option>
+                                        <option value="Balayage">Balayage</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Price (£):</label>
+                                    <input type="number" id="servicePrice" name="servicePrice" class="lucy-input" step="0.5" min="0" placeholder="0.00">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Quantity:</label>
+                                    <input type="number" id="quantity" name="quantity" class="lucy-input" min="1" value="1" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Date:</label>
+                                    <input type="date" id="serviceDate" name="serviceDate" class="lucy-input" required>
+                                </div>
+                            </div>
+                            
+                            <div class="price-display" id="priceDisplay">
+                                Total: £0.00
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other Income Section -->
+                    <div class="form-section" id="misc-section">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Description:</label>
+                                <input type="text" id="miscDescription" name="miscDescription" class="lucy-input" placeholder="e.g., consultation fee, product sale">
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Amount (£):</label>
+                                    <input type="number" id="miscAmount" name="miscAmount" class="lucy-input" step="0.5" min="0" placeholder="0.00">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Date:</label>
+                                    <input type="date" id="miscDate" name="miscDate" class="lucy-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expense Section -->
+                    <div class="form-section" id="expense-section">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Description:</label>
+                                <input type="text" id="expenseDescription" name="expenseDescription" class="lucy-input" placeholder="e.g., hair products, utilities">
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Amount (£):</label>
+                                    <input type="number" id="expenseAmount" name="expenseAmount" class="lucy-input" step="0.5" min="0" placeholder="0.00">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-black text-gray-700 mb-2 heading-font">Date:</label>
+                                    <input type="date" id="expenseDate" name="expenseDate" class="lucy-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="lucy-button w-full py-4 text-lg font-medium mt-8">
+                        <span id="submitText">Save Entry</span>
+                        <div id="submitSpinner" class="spinner" style="display: none;"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard-tab" class="tab-content" style="display: none;">
+            <div class="dashboard-grid">
+                <!-- Stats Cards -->
+                <div class="lucy-card stat-card">
+                    <div class="stat-number" id="totalIncome">£0.00</div>
+                    <div class="stat-label">Total Income</div>
+                </div>
+                
+                <div class="lucy-card stat-card">
+                    <div class="stat-number" id="totalExpenses">£0.00</div>
+                    <div class="stat-label">Total Expenses</div>
+                </div>
+                
+                <div class="lucy-card stat-card">
+                    <div class="stat-number" id="netProfit">£0.00</div>
+                    <div class="stat-label">Net Profit</div>
+                </div>
+
+                <!-- Charts -->
+                <div class="lucy-card">
+                    <h3 class="heading-font text-xl font-black text-gray-700 mb-4 text-center">Income by Service Type</h3>
+                    <div class="chart-container">
+                        <canvas id="serviceChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="lucy-card">
+                    <h3 class="heading-font text-xl font-black text-gray-700 mb-4 text-center">Monthly Trends</h3>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="lucy-card">
+                    <h3 class="heading-font text-xl font-black text-gray-700 mb-4 text-center">Daily Performance</h3>
+                    <div class="chart-container">
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Entries Tab -->
+        <div id="entries-tab" class="tab-content" style="display: none;">
+            <div class="lucy-card p-8">
+                <h3 class="heading-font text-2xl font-black text-gray-700 mb-6 text-center">Recent Entries</h3>
+                <div id="recentEntries">
+                    <!-- Recent entries will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Tab -->
+        <div id="export-tab" class="tab-content" style="display: none;">
+            <div class="lucy-card p-8">
+                <h3 class="heading-font text-2xl font-black text-gray-700 mb-6 text-center">Export & Analytics</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="text-center">
+                        <button onclick="exportCSV()" class="lucy-button w-full mb-4">Export CSV</button>
+                        <p class="text-sm text-gray-600">Download all entries as CSV for spreadsheet analysis</p>
+                    </div>
+                    <div class="text-center">
+                        <button onclick="exportJSON()" class="lucy-button w-full mb-4">Export JSON</button>
+                        <p class="text-sm text-gray-600">Download raw data in JSON format</p>
+                    </div>
+                    <div class="text-center">
+                        <button onclick="showConsumeSummary()" class="lucy-button w-full mb-4">View Summary</button>
+                        <p class="text-sm text-gray-600">Display detailed analytics in console</p>
+                    </div>
+                    <div class="text-center">
+                        <button onclick="clearAllData()" class="lucy-button w-full mb-4" style="background-color: #dc3545; border-color: #dc3545; color: white;">Clear All Data</button>
+                        <p class="text-sm text-gray-600">⚠️ Permanently delete all entries</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Install Button -->
+    <button id="installButton" class="install-button lucy-button">
+        📱 Install App
+    </button>
+
+    <!-- Hidden form for Netlify Forms detection -->
+    <form name="tracker-entries" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="entry-id" />
+        <input type="text" name="entry-type" />
+        <input type="date" name="entry-date" />
+        <textarea name="entry-data"></textarea>
+    </form>
+
+    <!-- Scripts -->
+    <script src="tracker-app.js"></script>
+    <script src="tracker-analytics.js"></script>
+    <script src="tracker-pwa.js"></script>
+</body>
+</html>
