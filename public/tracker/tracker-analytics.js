@@ -1,6 +1,14 @@
 /**
- * Analyze Tracker Data and Render Charts
+ * Lucy Scott Hair - Analytics Engine
+ * Handles chart rendering and data visualization
  */
+
+// Global chart instances to prevent memory leaks
+window.chartInstances = {
+    serviceChart: null,
+    monthlyChart: null,
+    dailyChart: null
+};
 
 function updateAnalytics() {
     const entries = (window.tracker) ? window.tracker.getStoredEntries() : [];
@@ -10,6 +18,8 @@ function updateAnalytics() {
     renderServiceChart(analytics.serviceBreakdown);
     renderMonthlyChart(analytics.monthlyData);
     renderDailyChart(analytics.dailyData);
+
+    console.log('Analytics updated:', analytics);
 }
 
 function calculateAnalytics(entries) {
@@ -73,28 +83,72 @@ function renderDashboard(analytics) {
 
 function renderServiceChart(serviceBreakdown) {
     const ctx = document.getElementById('serviceChart');
-    if (!ctx || !serviceBreakdown) return;
+    if (!ctx) return;
+
+    // Destroy existing chart if it exists
+    if (window.chartInstances.serviceChart) {
+        window.chartInstances.serviceChart.destroy();
+    }
+
+    // Check if we have data to display
+    if (!serviceBreakdown || Object.keys(serviceBreakdown).length === 0) {
+        ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
+        const context = ctx.getContext('2d');
+        context.font = '16px Source Sans 3';
+        context.fillStyle = '#4E4A47';
+        context.textAlign = 'center';
+        context.fillText('No service data available', ctx.width / 2, ctx.height / 2);
+        return;
+    }
 
     const labels = Object.keys(serviceBreakdown);
     const data = Object.values(serviceBreakdown);
-    const colors = new Array(labels.length).fill().map((_, i) => `hsl(${i * 30}, 70%, 70%)`);
+    const colors = [
+        '#D8A7B1', // Lucy accent
+        '#F8E5D6', // Lucy secondary
+        '#E5D5C8', // Lucy border
+        '#28a745', // Green
+        '#dc3545', // Red
+        '#ffc107', // Yellow
+        '#17a2b8', // Teal
+        '#6f42c1', // Purple
+        '#fd7e14', // Orange
+        '#20c997'  // Mint
+    ];
 
-    new Chart(ctx, {
+    window.chartInstances.serviceChart = new Chart(ctx, {
         type: 'pie',
         data: {
             labels,
             datasets: [{
                 data,
-                backgroundColor: colors,
-                borderWidth: 1,
-                borderColor: '#ffffff90'
+                backgroundColor: colors.slice(0, labels.length),
+                borderWidth: 2,
+                borderColor: '#ffffff'
             }]
         },
         options: {
+            responsive: true,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'top'
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            family: 'Source Sans 3',
+                            size: 12
+                        },
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            return `${context.label}: £${context.parsed.toFixed(2)} (${percentage}%)`;
+                        }
+                    }
                 }
             }
         }
@@ -103,41 +157,84 @@ function renderServiceChart(serviceBreakdown) {
 
 function renderMonthlyChart(monthlyData) {
     const ctx = document.getElementById('monthlyChart');
-    if (!ctx || !monthlyData) return;
+    if (!ctx) return;
 
-    const labels = Object.keys(monthlyData);
-    const incomeData = labels.map(month => monthlyData[month].income);
-    const expensesData = labels.map(month => monthlyData[month].expenses);
+    // Destroy existing chart if it exists
+    if (window.chartInstances.monthlyChart) {
+        window.chartInstances.monthlyChart.destroy();
+    }
 
-    new Chart(ctx, {
+    // Check if we have data to display
+    if (!monthlyData || Object.keys(monthlyData).length === 0) {
+        ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
+        const context = ctx.getContext('2d');
+        context.font = '16px Source Sans 3';
+        context.fillStyle = '#4E4A47';
+        context.textAlign = 'center';
+        context.fillText('No monthly data available', ctx.width / 2, ctx.height / 2);
+        return;
+    }
+
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                   'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    // Sort months properly
+    const sortedKeys = Object.keys(monthlyData).sort((a, b) => 
+        months.indexOf(a) - months.indexOf(b)
+    );
+    
+    const incomeData = sortedKeys.map(month => monthlyData[month].income);
+    const expensesData = sortedKeys.map(month => monthlyData[month].expenses);
+
+    window.chartInstances.monthlyChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels,
+            labels: sortedKeys,
             datasets: [
                 {
                     label: 'Income',
-                    backgroundColor: 'rgba(40, 167, 69, 0.7)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
+                    backgroundColor: 'rgba(216, 167, 177, 0.7)', // Lucy accent with transparency
+                    borderColor: '#D8A7B1',
+                    borderWidth: 2,
                     data: incomeData
                 },
                 {
                     label: 'Expenses',
                     backgroundColor: 'rgba(220, 53, 69, 0.7)',
-                    borderColor: 'rgba(220, 53, 69, 1)',
+                    borderColor: '#dc3545',
+                    borderWidth: 2,
                     data: expensesData
                 }
             ]
         },
         options: {
+            responsive: true,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'top'
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: 'Source Sans 3'
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: £${context.parsed.y.toFixed(2)}`;
+                        }
+                    }
                 }
             },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '£' + value.toFixed(0);
+                        }
+                    }
                 }
             }
         }
@@ -146,56 +243,117 @@ function renderMonthlyChart(monthlyData) {
 
 function renderDailyChart(dailyData) {
     const ctx = document.getElementById('dailyChart');
-    if (!ctx || !dailyData) return;
+    if (!ctx) return;
 
-    const labels = Object.keys(dailyData);
-    const incomeData = labels.map(day => dailyData[day].income);
-    const expensesData = labels.map(day => dailyData[day].expenses);
+    // Destroy existing chart if it exists
+    if (window.chartInstances.dailyChart) {
+        window.chartInstances.dailyChart.destroy();
+    }
 
-    new Chart(ctx, {
+    // Check if we have data to display
+    if (!dailyData || Object.keys(dailyData).length === 0) {
+        ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
+        const context = ctx.getContext('2d');
+        context.font = '16px Source Sans 3';
+        context.fillStyle = '#4E4A47';
+        context.textAlign = 'center';
+        context.fillText('No daily data available', ctx.width / 2, ctx.height / 2);
+        return;
+    }
+
+    // Sort dates chronologically
+    const sortedDates = Object.keys(dailyData).sort((a, b) => new Date(a) - new Date(b));
+    
+    // Get last 30 days or available data, whichever is shorter
+    const recentDates = sortedDates.slice(-30);
+    
+    const incomeData = recentDates.map(day => dailyData[day].income);
+    const expensesData = recentDates.map(day => dailyData[day].expenses);
+    
+    // Format dates for display
+    const formattedLabels = recentDates.map(date => {
+        const d = new Date(date);
+        return d.toLocaleDateString('en-GB', { month: 'short', day: 'numeric' });
+    });
+
+    window.chartInstances.dailyChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels,
+            labels: formattedLabels,
             datasets: [
                 {
                     label: 'Income',
-                    backgroundColor: 'rgba(40, 167, 69, 0.7)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    fill: false,
+                    backgroundColor: 'rgba(216, 167, 177, 0.2)',
+                    borderColor: '#D8A7B1',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
                     data: incomeData
                 },
                 {
                     label: 'Expenses',
-                    backgroundColor: 'rgba(220, 53, 69, 0.7)',
-                    borderColor: 'rgba(220, 53, 69, 1)',
-                    fill: false,
+                    backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                    borderColor: '#dc3545',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
                     data: expensesData
                 }
             ]
         },
         options: {
+            responsive: true,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'top'
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: 'Source Sans 3'
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const index = tooltipItems[0].dataIndex;
+                            const date = new Date(recentDates[index]);
+                            return date.toLocaleDateString('en-GB', { 
+                                weekday: 'long', 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            });
+                        },
+                        label: function(context) {
+                            return `${context.dataset.label}: £${context.parsed.y.toFixed(2)}`;
+                        }
+                    }
                 }
             },
             scales: {
                 x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        tooltipFormat: 'MMM dd, yyyy',
-                        displayFormats: {
-                            day: 'MMM dd'
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Date',
+                        font: {
+                            family: 'Source Sans 3'
                         }
                     }
                 },
                 y: {
                     beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount (£)',
+                        font: {
+                            family: 'Source Sans 3'
+                        }
+                    },
                     ticks: {
                         callback: function(value) {
-                            return `£${value.toFixed(2)}`;
+                            return '£' + value.toFixed(0);
                         }
                     }
                 }

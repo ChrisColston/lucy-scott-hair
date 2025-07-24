@@ -223,14 +223,24 @@ class LucyTracker {
             const activeType = document.querySelector('[data-type].active').dataset.type;
             const entry = this.createEntryFromForm(activeType);
             
-            // Save to local storage
-            this.saveEntry(entry);
-            
-            // Try to save to Netlify database if available
-            await this.saveToNetlify(entry);
-            
-            // Show success message
-            this.showSuccessMessage('Entry saved successfully!');
+            // Check if we're editing an existing entry
+            if (this.editingEntryId) {
+                // Update existing entry
+                entry.id = this.editingEntryId;
+                this.updateEntry(entry);
+                this.showSuccessMessage('Entry updated successfully!');
+                
+                // Clear editing state
+                delete this.editingEntryId;
+                submitText.textContent = 'Save Entry';
+            } else {
+                // Save new entry
+                this.saveEntry(entry);
+                this.showSuccessMessage('Entry saved successfully!');
+                
+                // Try to save to Netlify database if available
+                await this.saveToNetlify(entry);
+            }
             
             // Reset form
             e.target.reset();
@@ -296,6 +306,20 @@ class LucyTracker {
         entries.unshift(entry);
         entries = entries.slice(0, 1000); // Keep only last 1000 entries
         localStorage.setItem(this.storageKey, JSON.stringify(entries));
+    }
+
+    updateEntry(updatedEntry) {
+        let entries = this.getStoredEntries();
+        const index = entries.findIndex(entry => entry.id === updatedEntry.id);
+        
+        if (index !== -1) {
+            // Preserve original timestamp but update the entry
+            entries[index] = {
+                ...updatedEntry,
+                timestamp: entries[index].timestamp // Keep original timestamp
+            };
+            localStorage.setItem(this.storageKey, JSON.stringify(entries));
+        }
     }
 
     getStoredEntries() {
@@ -371,7 +395,7 @@ class LucyTracker {
             return;
         }
         
-        container.innerHTML = entries.slice(0, 20).map(entry => {
+        container.innerHTML = entries.slice(0, 20).map((entry, index) => {
             let description, amount, amountClass;
             
             if (entry.type === 'haircut') {
@@ -389,12 +413,22 @@ class LucyTracker {
             }
             
             return `
-                <div class="entry-item">
+                <div class="entry-item" data-entry-id="${entry.id}">
                     <div class="entry-details">
                         <div class="font-medium text-gray-700">${description}</div>
                         <div class="text-sm text-gray-500">${entry.date} • ${new Date(entry.timestamp).toLocaleTimeString()}</div>
                     </div>
-                    <div class="entry-amount ${amountClass} text-lg">${amount}</div>
+                    <div class="flex items-center gap-2">
+                        <div class="entry-amount ${amountClass} text-lg">${amount}</div>
+                        <div class="flex gap-1">
+                            <button onclick="editEntry('${entry.id}')" class="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors" title="Edit">
+                                ✏️
+                            </button>
+                            <button onclick="deleteEntry('${entry.id}')" class="text-xs px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `;
         }).join('');
@@ -581,6 +615,94 @@ function showConsoleSummary() {
 function clearAllData() {
     if (window.tracker) {
         window.tracker.clearAllData();
+    }
+}
+
+// Edit and Delete functions
+function editEntry(entryId) {
+    if (!window.tracker) return;
+    
+    const entries = window.tracker.getStoredEntries();
+    const entry = entries.find(e => e.id === entryId);
+    
+    if (!entry) {
+        alert('Entry not found');
+        return;
+    }
+    
+    // Switch to entry tab
+    window.tracker.switchTab('entry');
+    
+    // Switch to appropriate entry type
+    window.tracker.switchEntryType(entry.type);
+    
+    // Populate form with entry data
+    if (entry.type === 'haircut') {
+        document.getElementById('haircutType').value = entry.service;
+        document.getElementById('servicePrice').value = entry.price;
+        document.getElementById('quantity').value = entry.quantity;
+        document.getElementById('serviceDate').value = entry.date;
+        window.tracker.updatePriceDisplay();
+    } else if (entry.type === 'misc') {
+        document.getElementById('miscDescription').value = entry.description;
+        document.getElementById('miscAmount').value = entry.amount;
+        document.getElementById('miscDate').value = entry.date;
+    } else if (entry.type === 'expense') {
+        document.getElementById('expenseDescription').value = entry.description;
+        document.getElementById('expenseAmount').value = entry.amount;
+        document.getElementById('expenseDate').value = entry.date;
+    }
+    
+    // Store the entry ID being edited
+    window.tracker.editingEntryId = entryId;
+    
+    // Update submit button text
+    document.getElementById('submitText').textContent = 'Update Entry';
+    
+    // Show edit notification
+    window.tracker.showSuccessMessage('Editing entry - make changes and click "Update Entry"', 'warning');
+}
+
+function deleteEntry(entryId) {
+    if (!window.tracker) return;
+    
+    const entries = window.tracker.getStoredEntries();
+    const entry = entries.find(e => e.id === entryId);
+    
+    if (!entry) {
+        alert('Entry not found');
+        return;
+    }
+    
+    // Get entry description for confirmation
+    let description;
+    if (entry.type === 'haircut') {
+        description = `${entry.service} x${entry.quantity} (£${(entry.price * entry.quantity).toFixed(2)})`;
+    } else if (entry.type === 'misc') {
+        description = `${entry.description} (£${entry.amount.toFixed(2)})`;
+    } else {
+        description = `${entry.description} (£${entry.amount.toFixed(2)})`;
+    }
+    
+    const confirmed = confirm(
+        `Are you sure you want to delete this entry?\n\n` +
+        `${description}\n` +
+        `Date: ${entry.date}\n\n` +
+        `This action cannot be undone.`
+    );
+    
+    if (confirmed) {
+        // Remove entry from stored data
+        const updatedEntries = entries.filter(e => e.id !== entryId);
+        localStorage.setItem(window.tracker.storageKey, JSON.stringify(updatedEntries));
+        
+        // Refresh displays
+        window.tracker.loadRecentEntries();
+        if (window.tracker.currentTab === 'dashboard') {
+            window.tracker.updateDashboard();
+        }
+        
+        window.tracker.showSuccessMessage('Entry deleted successfully');
     }
 }
 

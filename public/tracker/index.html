@@ -74,7 +74,7 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* Lucy Button - Exact Match */
+        /* Enhanced Dropdown Styles */
         .lucy-button {
             background-color: var(--lucy-ivory);
             border: 2px solid var(--lucy-border);
@@ -103,8 +103,22 @@
             border-color: var(--lucy-accent);
         }
 
+        .lucy-select {
+            background-color: var(--lucy-ivory);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(78, 74, 71, 0.1);
+            font-family: 'Source Sans 3', sans-serif;
+            padding: 12px 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+        }
+
+        .lucy-select option {
+            background-color: var(--lucy-ivory);
+        }
+
         /* Input Styles - Match main site */
-        .lucy-input, .lucy-select {
+        .lucy-input {
             border: 2px solid #F8E5E8;
             border-radius: 12px;
             padding: 12px 16px;
@@ -118,6 +132,7 @@
         .lucy-input:focus, .lucy-select:focus {
             outline: none;
             border-color: var(--lucy-accent);
+            box-shadow: 0 4px 12px rgba(78, 74, 71, 0.15);
         }
 
         /* Card Styles - Match main site */

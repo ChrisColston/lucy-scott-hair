@@ -1,7 +1,5 @@
-const { createClient } = require('@supabase/supabase-js');
-
-// Initialize Supabase client (you'll need to set up Supabase or use Netlify's built-in storage)
-// For now, we'll use a simple approach with Netlify Forms as fallback
+// Simple Netlify function to save tracker entries
+// Uses Netlify Forms as backup storage
 
 exports.handler = async (event, context) => {
   // Set CORS headers
