@@ -1,0 +1,1091 @@
+"use client"
+
+import Script from 'next/script'
+import { useEffect, useState, useRef } from 'react'
+import { 
+  FiPlus, 
+  FiBarChart, 
+  FiList, 
+  FiDownload, 
+  FiEdit3, 
+  FiTrash2, 
+  FiCheck,
+  FiX
+} from 'react-icons/fi'
+
+const servicePrices = {
+  'Dry cut': 20,
+  'Wet cut': 35,
+  'Cut and finish': 45,
+  'Restyle': 55,
+  'Fringe trim': 10,
+  'Children\'s Dry cut': 15,
+  'Children\'s Wet cut': 25,
+  'Children\'s Cut and finish': 30,
+  'Blow dry': 30,
+  'Long hair blow dry': 35,
+  'Straightening/curling': 10,
+  'Consultation - 15min Free': 0,
+  'T-section': 70,
+  'Half head': 80,
+  'Full head': 90,
+  'Full head tint': 70,
+  'Root tint': 65,
+  'Toner': 15,
+  'Balayage': 135
+};
+
+export default function Tracker() {
+  const [activeTab, setActiveTab] = useState('entry');
+  const [activeEntryType, setActiveEntryType] = useState('haircut');
+  const [serviceType, setServiceType] = useState('');
+  const [servicePrice, setServicePrice] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [entries, setEntries] = useState([]);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [editingEntry, setEditingEntry] = useState(null);
+  const [editingData, setEditingData] = useState({});
+  
+  // Chart references
+  const serviceChartRef = useRef(null);
+  const monthlyChartRef = useRef(null);
+  const dailyChartRef = useRef(null);
+  const chartsInitialized = useRef(false);
+  
+  const today = new Date().toISOString().split('T')[0];
+  
+  // Load entries from localStorage on mount
+  useEffect(() => {
+    const savedEntries = localStorage.getItem('lucyHairTrackerData');
+    if (savedEntries) {
+      const parsedEntries = JSON.parse(savedEntries);
+      setEntries(parsedEntries);
+      calculateTotals(parsedEntries);
+    }
+  }, []);
+
+  // Initialize charts when dashboard tab is active and Chart.js is loaded
+  useEffect(() => {
+    if (activeTab === 'dashboard' && typeof window !== 'undefined' && window.Chart) {
+      // Reset charts flag when switching to dashboard
+      chartsInitialized.current = false;
+      setTimeout(() => {
+        initCharts();
+        chartsInitialized.current = true;
+      }, 200);
+    }
+  }, [activeTab]);
+
+  // Update charts when entries change
+  useEffect(() => {
+    if (activeTab === 'dashboard' && chartsInitialized.current && typeof window !== 'undefined' && window.Chart) {
+      updateCharts();
+    }
+  }, [entries, activeTab]);
+
+  const calculateTotals = (entriesData) => {
+    let income = 0;
+    let expenses = 0;
+    
+    entriesData.forEach(entry => {
+      if (entry.type === 'expense') {
+        expenses += parseFloat(entry.amount) || 0;
+      } else {
+        income += parseFloat(entry.amount) || 0;
+      }
+    });
+    
+    setTotalIncome(income);
+    setTotalExpenses(expenses);
+  };
+
+  const handleServiceTypeChange = (value) => {
+    setServiceType(value);
+    if (value && servicePrices[value] !== undefined) {
+      setServicePrice(servicePrices[value]);
+    } else {
+      setServicePrice('');
+    }
+  };
+
+  const validatePriceInput = (value) => {
+    if (!value) return '';
+    const numValue = parseFloat(value);
+    if (isNaN(numValue)) return '';
+    return Math.round(numValue * 2) / 2; // Round to nearest 0.5
+  };
+
+  const handlePriceChange = (value) => {
+    const validated = validatePriceInput(value);
+    setServicePrice(validated);
+  };
+
+  const saveEntry = (entryData) => {
+    const newEntries = [...entries, entryData];
+    setEntries(newEntries);
+    localStorage.setItem('lucyHairTrackerData', JSON.stringify(newEntries));
+    calculateTotals(newEntries);
+    
+    // Show success message
+    const successMsg = document.getElementById('successMessage');
+    if (successMsg) {
+      successMsg.style.display = 'block';
+      setTimeout(() => {
+        successMsg.style.display = 'none';
+      }, 3000);
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    
+    let entryData = {
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+    };
+
+    if (activeEntryType === 'haircut') {
+      entryData = {
+        ...entryData,
+        type: 'haircut',
+        service: formData.get('haircutType'),
+        price: parseFloat(formData.get('servicePrice')) || 0,
+        quantity: parseInt(formData.get('quantity')) || 1,
+        amount: (parseFloat(formData.get('servicePrice')) || 0) * (parseInt(formData.get('quantity')) || 1),
+        date: formData.get('serviceDate')
+      };
+    } else if (activeEntryType === 'misc') {
+      entryData = {
+        ...entryData,
+        type: 'misc',
+        description: formData.get('miscDescription'),
+        amount: parseFloat(formData.get('miscAmount')) || 0,
+        date: formData.get('miscDate')
+      };
+    } else if (activeEntryType === 'expense') {
+      entryData = {
+        ...entryData,
+        type: 'expense',
+        description: formData.get('expenseDescription'),
+        amount: parseFloat(formData.get('expenseAmount')) || 0,
+        date: formData.get('expenseDate')
+      };
+    }
+
+    saveEntry(entryData);
+    e.target.reset();
+    setServiceType('');
+    setServicePrice('');
+    setQuantity(1);
+  };
+
+  const exportCSV = () => {
+    if (entries.length === 0) {
+      alert('No entries to export');
+      return;
+    }
+
+    const headers = ['Date', 'Type', 'Description/Service', 'Amount', 'Quantity'];
+    const csvContent = [headers.join(',')];
+
+    entries.forEach(entry => {
+      const row = [
+        entry.date,
+        entry.type,
+        entry.service || entry.description || '',
+        entry.amount,
+        entry.quantity || 1
+      ];
+      csvContent.push(row.join(','));
+    });
+
+    const blob = new Blob([csvContent.join('\n')], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `lucy-hair-tracker-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const exportJSON = () => {
+    if (entries.length === 0) {
+      alert('No entries to export');
+      return;
+    }
+
+    const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `lucy-hair-tracker-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const clearAllData = () => {
+    if (confirm('Are you sure you want to delete all entries? This cannot be undone.')) {
+      localStorage.removeItem('lucyHairTrackerData');
+      setEntries([]);
+      setTotalIncome(0);
+      setTotalExpenses(0);
+      alert('All data has been cleared.');
+    }
+  };
+
+  const showConsumeSummary = () => {
+    console.log('=== LUCY SCOTT HAIR TRACKER SUMMARY ===');
+    console.log(`Total Entries: ${entries.length}`);
+    console.log(`Total Income: £${totalIncome.toFixed(2)}`);
+    console.log(`Total Expenses: £${totalExpenses.toFixed(2)}`);
+    console.log(`Net Profit: £${(totalIncome - totalExpenses).toFixed(2)}`);
+    console.log('=== DETAILED ENTRIES ===');
+    console.table(entries);
+    alert('Summary logged to console. Open Developer Tools to view.');
+  };
+
+  const deleteEntry = (entryId) => {
+    if (confirm('Are you sure you want to delete this entry?')) {
+      const newEntries = entries.filter(entry => entry.id !== entryId);
+      setEntries(newEntries);
+      localStorage.setItem('lucyHairTrackerData', JSON.stringify(newEntries));
+      calculateTotals(newEntries);
+    }
+  };
+
+  const startEditing = (entry) => {
+    setEditingEntry(entry.id);
+    setEditingData({ ...entry });
+  };
+
+  const cancelEditing = () => {
+    setEditingEntry(null);
+    setEditingData({});
+  };
+
+  const saveEdit = () => {
+    const newEntries = entries.map(entry => 
+      entry.id === editingEntry ? editingData : entry
+    );
+    setEntries(newEntries);
+    localStorage.setItem('lucyHairTrackerData', JSON.stringify(newEntries));
+    calculateTotals(newEntries);
+    setEditingEntry(null);
+    setEditingData({});
+  };
+
+  const initCharts = () => {
+    if (typeof window === 'undefined' || !window.Chart) return;
+    
+    // Service Chart (Pie)
+    const serviceCtx = document.getElementById('serviceChart');
+    if (serviceCtx) {
+      const serviceData = {};
+      entries.forEach(entry => {
+        if (entry.type === 'haircut' && entry.service) {
+          serviceData[entry.service] = (serviceData[entry.service] || 0) + entry.amount;
+        }
+      });
+      
+      serviceChartRef.current = new window.Chart(serviceCtx, {
+        type: 'pie',
+        data: {
+          labels: Object.keys(serviceData),
+          datasets: [{
+            data: Object.values(serviceData),
+            backgroundColor: [
+              '#D8A7B1', '#F8E5D6', '#E5D5C8', '#FDF5EA',
+              '#B8A6D8', '#D6E5F8', '#C8D5E5', '#EAF5FD'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+    
+    // Monthly Chart (Line)
+    const monthlyCtx = document.getElementById('monthlyChart');
+    if (monthlyCtx) {
+      const monthlyData = {};
+      entries.forEach(entry => {
+        const month = entry.date ? entry.date.substring(0, 7) : new Date().toISOString().substring(0, 7);
+        if (!monthlyData[month]) {
+          monthlyData[month] = { income: 0, expenses: 0 };
+        }
+        if (entry.type === 'expense') {
+          monthlyData[month].expenses += entry.amount;
+        } else {
+          monthlyData[month].income += entry.amount;
+        }
+      });
+      
+      const sortedMonths = Object.keys(monthlyData).sort();
+      
+      monthlyChartRef.current = new window.Chart(monthlyCtx, {
+        type: 'line',
+        data: {
+          labels: sortedMonths,
+          datasets: [{
+            label: 'Income',
+            data: sortedMonths.map(month => monthlyData[month].income),
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+            tension: 0.4
+          }, {
+            label: 'Expenses',
+            data: sortedMonths.map(month => monthlyData[month].expenses),
+            borderColor: '#dc3545',
+            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return '£' + value.toFixed(0);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Daily Chart (Bar)
+    const dailyCtx = document.getElementById('dailyChart');
+    if (dailyCtx) {
+      const last7Days = [];
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        last7Days.push(date.toISOString().split('T')[0]);
+      }
+      
+      const dailyData = {};
+      last7Days.forEach(date => {
+        dailyData[date] = { income: 0, expenses: 0 };
+      });
+      
+      entries.forEach(entry => {
+        if (dailyData[entry.date]) {
+          if (entry.type === 'expense') {
+            dailyData[entry.date].expenses += entry.amount;
+          } else {
+            dailyData[entry.date].income += entry.amount;
+          }
+        }
+      });
+      
+      dailyChartRef.current = new window.Chart(dailyCtx, {
+        type: 'bar',
+        data: {
+          labels: last7Days.map(date => new Date(date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric' })),
+          datasets: [{
+            label: 'Income',
+            data: last7Days.map(date => dailyData[date].income),
+            backgroundColor: '#28a745'
+          }, {
+            label: 'Expenses',
+            data: last7Days.map(date => dailyData[date].expenses),
+            backgroundColor: '#dc3545'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return '£' + value.toFixed(0);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  };
+  
+  const updateCharts = () => {
+    if (serviceChartRef.current) {
+      serviceChartRef.current.destroy();
+      serviceChartRef.current = null;
+    }
+    if (monthlyChartRef.current) {
+      monthlyChartRef.current.destroy();
+      monthlyChartRef.current = null;
+    }
+    if (dailyChartRef.current) {
+      dailyChartRef.current.destroy();
+      dailyChartRef.current = null;
+    }
+    
+    if (activeTab === 'dashboard') {
+      setTimeout(() => {
+        initCharts();
+      }, 100);
+    }
+  };
+
+  return (
+    <>
+      
+      <div className="min-h-screen" style={{
+        fontFamily: "'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        fontWeight: 300,
+        color: '#4E4A47',
+        background: 'linear-gradient(-45deg, #FDF5EA, #F8E5D6, #FDF5EA, #F8E5D6)',
+        backgroundSize: '400% 400%',
+        animation: 'gradientAnimation 15s ease infinite'
+      }}>
+        <style jsx>{`
+          @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          
+          .lucy-button {
+            background-color: #FDF5EA;
+            border: 2px solid #E5D5C8;
+            border-radius: 12px;
+            color: #4E4A47;
+            font-family: 'Source Sans 3', sans-serif;
+            font-weight: 400;
+            padding: 12px 32px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(78, 74, 71, 0.1);
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+          }
+          
+          .lucy-button:hover {
+            background-color: #F8E5D6;
+            border-color: #D8A7B1;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(78, 74, 71, 0.15);
+          }
+          
+          .lucy-button.active {
+            background-color: #D8A7B1;
+            color: white;
+            border-color: #D8A7B1;
+          }
+          
+          .lucy-input, .lucy-select {
+            border: 2px solid #F8E5E8;
+            border-radius: 12px;
+            padding: 18px 24px;
+            font-size: 16px;
+            font-family: 'Source Sans 3', sans-serif;
+            transition: border-color 0.3s ease;
+            background: white;
+            width: 100%;
+          }
+          
+          .lucy-select {
+            background: #FDF5EA;
+            box-shadow: 0 2px 8px rgba(78, 74, 71, 0.1);
+          }
+          
+          .lucy-input:focus, .lucy-select:focus {
+            outline: none;
+            border-color: #D8A7B1;
+            box-shadow: 0 4px 12px rgba(78, 74, 71, 0.15);
+          }
+          
+          .lucy-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 4px solid #E5D5C8;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+          }
+          
+          .nav-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+          }
+          
+          .nav-tab {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            white-space: nowrap;
+            font-size: 14px;
+            padding: 8px 12px;
+          }
+          
+          .nav-tab-icon {
+            display: inline-block;
+            margin-right: 4px;
+          }
+          
+          .form-section {
+            display: none;
+          }
+          
+          .form-section.active {
+            display: block;
+          }
+          
+          .price-display {
+            background: rgba(216, 167, 177, 0.1);
+            border: 2px solid #D8A7B1;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+            color: #D8A7B1;
+            font-size: 1.2rem;
+            margin-top: 12px;
+          }
+          
+          .total-submit-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-top: 24px;
+          }
+          
+          .total-submit-row .price-display {
+            flex: 1;
+            margin-top: 0;
+          }
+          
+          .total-submit-row .lucy-button {
+            flex: 1;
+            margin: 0;
+          }
+          
+          .entry-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+          }
+          
+          .icon-button {
+            background: none;
+            border: none;
+            color: #4E4A47;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .icon-button:hover {
+            background-color: rgba(78, 74, 71, 0.1);
+          }
+          
+          .icon-button.edit {
+            color: #007bff;
+          }
+          
+          .icon-button.delete {
+            color: #dc3545;
+          }
+          
+          .icon-button.save {
+            color: #28a745;
+          }
+          
+          .editing-input {
+            border: 1px solid #D8A7B1;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 14px;
+            width: 100%;
+            margin: 2px 0;
+          }
+          
+          .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            border: 2px solid #c3e6cb;
+          }
+          
+          .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+          }
+          
+          .chart-container {
+            position: relative;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 20px;
+          }
+          
+          .stat-card {
+            text-align: center;
+            padding: 24px;
+          }
+          
+          .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #D8A7B1;
+            margin-bottom: 8px;
+          }
+          
+          .stat-label {
+            font-size: 1rem;
+            color: #4E4A47;
+          }
+          
+          .entry-item {
+            background: rgba(255, 255, 255, 0.7);
+            border: 2px solid #E5D5C8;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+          }
+          
+          .entry-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(78, 74, 71, 0.15);
+          }
+          
+          .entry-amount.income {
+            color: #28a745;
+            font-weight: 600;
+          }
+          
+          .entry-amount.expense {
+            color: #dc3545;
+            font-weight: 600;
+          }
+          
+          @media (max-width: 768px) {
+            .nav-tab {
+              font-size: 12px;
+              padding: 6px 8px;
+              min-width: 80px;
+            }
+            .nav-tab-icon {
+              margin-right: 2px;
+            }
+            .dashboard-grid {
+              grid-template-columns: 1fr;
+            }
+            .total-submit-row {
+              flex-direction: column;
+              gap: 12px;
+            }
+            .total-submit-row .price-display,
+            .total-submit-row .lucy-button {
+              width: 100%;
+            }
+          }
+        `}</style>
+        
+        {/* Header */}
+        <div className="text-center py-8 px-4">
+          <img src="/lucy-scott-wordmark.png" alt="Lucy Scott Hair" className="mx-auto mb-4" style={{maxWidth: '250px', height: 'auto'}} />
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-700 mb-2" style={{fontFamily: "'Playfair Display', serif"}}>Business Tracker</h1>
+          <p className="text-lg text-gray-600" style={{fontFamily: "'Source Sans 3', sans-serif", fontWeight: 300}}>Track your income, expenses, and analytics</p>
+        </div>
+
+        {/* Main Container */}
+        <div className="max-w-6xl mx-auto px-4 pb-8">
+          {/* Success Message */}
+          <div id="successMessage" className="success-message">
+            Entry saved successfully!
+          </div>
+
+          {/* Navigation Tabs */}
+        <div className="nav-tabs">
+            <button 
+              className={`lucy-button nav-tab ${activeTab === 'entry' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('entry')}
+            >
+              <span className="nav-tab-icon"><FiPlus /></span>
+              New Entry
+            </button>
+            <button 
+              className={`lucy-button nav-tab ${activeTab === 'dashboard' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('dashboard')}
+            >
+              <span className="nav-tab-icon"><FiBarChart /></span>
+              Dashboard
+            </button>
+            <button 
+              className={`lucy-button nav-tab ${activeTab === 'entries' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('entries')}
+            >
+              <span className="nav-tab-icon"><FiList /></span>
+              Entries
+            </button>
+            <button 
+              className={`lucy-button nav-tab ${activeTab === 'export' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('export')}
+            >
+              <span className="nav-tab-icon"><FiDownload /></span>
+              Export
+            </button>
+          </div>
+
+          {/* Entry Tab */}
+          {activeTab === 'entry' && (
+            <div className="lucy-card p-8">
+              {/* Entry Type Selector */}
+              <div className="flex gap-3 mb-8 flex-wrap">
+                <button 
+                  className={`lucy-button ${activeEntryType === 'haircut' ? 'active' : ''} flex-1 min-w-[120px]`}
+                  onClick={() => setActiveEntryType('haircut')}
+                >
+                  Hair Service
+                </button>
+                <button 
+                  className={`lucy-button ${activeEntryType === 'misc' ? 'active' : ''} flex-1 min-w-[120px]`}
+                  onClick={() => setActiveEntryType('misc')}
+                >
+                  Other Income
+                </button>
+                <button 
+                  className={`lucy-button ${activeEntryType === 'expense' ? 'active' : ''} flex-1 min-w-[120px]`}
+                  onClick={() => setActiveEntryType('expense')}
+                >
+                  Expense
+                </button>
+              </div>
+
+              <form onSubmit={handleFormSubmit}>
+                {/* Hair Service Section */}
+                {activeEntryType === 'haircut' && (
+                  <div className="space-y-8">
+                    <div>
+                      <label className="block text-sm font-black text-gray-700 mb-2">Service Type:</label>
+                      <select 
+                        name="haircutType" 
+                        className="lucy-select" 
+                        required
+                        value={serviceType}
+                        onChange={(e) => handleServiceTypeChange(e.target.value)}
+                      >
+                        <option value="">Select a service...</option>
+                        <optgroup label="CUTS">
+                          <option value="Dry cut">Dry cut</option>
+                          <option value="Wet cut">Wet cut</option>
+                          <option value="Cut and finish">Cut and finish</option>
+                          <option value="Restyle">Restyle</option>
+                          <option value="Fringe trim">Fringe trim</option>
+                        </optgroup>
+                        <optgroup label="CHILDREN'S CUTS">
+                          <option value="Children's Dry cut">Children's Dry cut</option>
+                          <option value="Children's Wet cut">Children's Wet cut</option>
+                          <option value="Children's Cut and finish">Children's Cut and finish</option>
+                        </optgroup>
+                        <optgroup label="STYLING">
+                          <option value="Blow dry">Blow dry</option>
+                          <option value="Long hair blow dry">Long hair blow dry</option>
+                          <option value="Straightening/curling">Straightening/curling</option>
+                        </optgroup>
+                        <optgroup label="COLOURING">
+                          <option value="Consultation - 15min Free">Consultation - 15min Free</option>
+                          <option value="T-section">T-section</option>
+                          <option value="Half head">Half head</option>
+                          <option value="Full head">Full head</option>
+                          <option value="Full head tint">Full head tint</option>
+                          <option value="Root tint">Root tint</option>
+                          <option value="Toner">Toner</option>
+                          <option value="Balayage">Balayage</option>
+                        </optgroup>
+                      </select>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                      <div>
+                        <label className="block text-sm font-black text-gray-700 mb-2">Price (£):</label>
+                        <input 
+                          type="number" 
+                          id="servicePrice" 
+                          name="servicePrice" 
+                          className="lucy-input" 
+                          step="0.5" 
+                          min="0" 
+                          placeholder="0.00" 
+                          value={servicePrice}
+                          onChange={(e) => handlePriceChange(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-black text-gray-700 mb-2">Quantity:</label>
+                        <input 
+                          type="number" 
+                          id="quantity" 
+                          name="quantity" 
+                          className="lucy-input" 
+                          min="1" 
+                          value={quantity}
+                          onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                          required 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-black text-gray-700 mb-2">Date:</label>
+                        <input type="date" id="serviceDate" name="serviceDate" className="lucy-input" defaultValue={today} required />
+                      </div>
+                    </div>
+                    
+                    <div className="total-submit-row">
+                      <div className="price-display">
+                        Total: £{(servicePrice * quantity).toFixed(2)}
+                      </div>
+                      <button type="submit" className="lucy-button">
+                        Save Entry
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Other Income Section */}
+                {activeEntryType === 'misc' && (
+                  <div className="space-y-8">
+                    <div>
+                      <label className="block text-sm font-black text-gray-700 mb-2">Description:</label>
+                      <input type="text" id="miscDescription" name="miscDescription" className="lucy-input" placeholder="e.g., consultation fee, product sale" required />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div>
+                        <label className="block text-sm font-black text-gray-700 mb-2">Amount (£):</label>
+                        <input type="number" id="miscAmount" name="miscAmount" className="lucy-input" step="0.5" min="0" placeholder="0.00" required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-black text-gray-700 mb-2">Date:</label>
+                        <input type="date" id="miscDate" name="miscDate" className="lucy-input" defaultValue={today} required />
+                      </div>
+                    </div>
+                    
+                    <button type="submit" className="lucy-button w-full mt-6">
+                      Save Entry
+                    </button>
+                  </div>
+                )}
+
+                {/* Expense Section */}
+                {activeEntryType === 'expense' && (
+                  <div className="space-y-8">
+                    <div>
+                      <label className="block text-sm font-black text-gray-700 mb-2">Description:</label>
+                      <input type="text" id="expenseDescription" name="expenseDescription" className="lucy-input" placeholder="e.g., hair products, utilities" required />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div>
+                        <label className="block text-sm font-black text-gray-700 mb-2">Amount (£):</label>
+                        <input type="number" id="expenseAmount" name="expenseAmount" className="lucy-input" step="0.5" min="0" placeholder="0.00" required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-black text-gray-700 mb-2">Date:</label>
+                        <input type="date" id="expenseDate" name="expenseDate" className="lucy-input" defaultValue={today} required />
+                      </div>
+                    </div>
+                    
+                    <button type="submit" className="lucy-button w-full mt-6">
+                      Save Entry
+                    </button>
+                  </div>
+                )}
+
+              </form>
+            </div>
+          )}
+
+          {/* Dashboard Tab */}
+          {activeTab === 'dashboard' && (
+            <div className="dashboard-grid">
+              {/* Stats Cards */}
+              <div className="lucy-card stat-card">
+                <div className="stat-number">£{totalIncome.toFixed(2)}</div>
+                <div className="stat-label">Total Income</div>
+              </div>
+              
+              <div className="lucy-card stat-card">
+                <div className="stat-number">£{totalExpenses.toFixed(2)}</div>
+                <div className="stat-label">Total Expenses</div>
+              </div>
+              
+              <div className="lucy-card stat-card">
+                <div className="stat-number">£{(totalIncome - totalExpenses).toFixed(2)}</div>
+                <div className="stat-label">Net Profit</div>
+              </div>
+
+              {/* Charts */}
+              <div className="lucy-card">
+                <h3 className="text-xl font-black text-gray-700 mb-4 text-center">Income by Service Type</h3>
+                <div className="chart-container">
+                  <canvas id="serviceChart"></canvas>
+                </div>
+              </div>
+
+              <div className="lucy-card">
+                <h3 className="text-xl font-black text-gray-700 mb-4 text-center">Monthly Trends</h3>
+                <div className="chart-container">
+                  <canvas id="monthlyChart"></canvas>
+                </div>
+              </div>
+
+              <div className="lucy-card">
+                <h3 className="text-xl font-black text-gray-700 mb-4 text-center">Daily Performance</h3>
+                <div className="chart-container">
+                  <canvas id="dailyChart"></canvas>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Recent Entries Tab */}
+          {activeTab === 'entries' && (
+            <div className="lucy-card p-8">
+              <h3 className="text-2xl font-black text-gray-700 mb-6 text-center">Recent Entries</h3>
+              <div>
+                {entries.length === 0 ? (
+                  <p className="text-center text-gray-500 py-8">No entries yet. Add your first entry to get started!</p>
+                ) : (
+                  entries.slice().reverse().map((entry) => (
+                    <div key={entry.id} className="entry-item">
+                      {editingEntry === entry.id ? (
+                        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                          <div>
+                            <input
+                              type="text"
+                              className="editing-input"
+                              value={editingData.service || editingData.description || ''}
+                              onChange={(e) => setEditingData({
+                                ...editingData,
+                                [entry.service ? 'service' : 'description']: e.target.value
+                              })}
+                            />
+                          </div>
+                          <div>
+                            <input
+                              type="number"
+                              className="editing-input"
+                              step="0.5"
+                              min="0"
+                              value={editingData.amount || ''}
+                              onChange={(e) => setEditingData({
+                                ...editingData,
+                                amount: parseFloat(e.target.value) || 0
+                              })}
+                            />
+                          </div>
+                          <div className="entry-actions">
+                            <button className="icon-button save" onClick={saveEdit}>
+                              <FiCheck size={16} />
+                            </button>
+                            <button className="icon-button" onClick={cancelEditing}>
+                              <FiX size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex-1">
+                            <div className="font-semibold">
+                              {entry.service || entry.description}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {entry.date} • {entry.type}
+                              {entry.quantity && entry.quantity > 1 && ` • Qty: ${entry.quantity}`}
+                            </div>
+                          </div>
+                          <div className={`entry-amount ${entry.type === 'expense' ? 'expense' : 'income'}`}>
+                            {entry.type === 'expense' ? '-' : '+'}£{entry.amount.toFixed(2)}
+                          </div>
+                          <div className="entry-actions">
+                            <button className="icon-button edit" onClick={() => startEditing(entry)}>
+                              <FiEdit3 size={16} />
+                            </button>
+                            <button className="icon-button delete" onClick={() => deleteEntry(entry.id)}>
+                              <FiTrash2 size={16} />
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Export Tab */}
+          {activeTab === 'export' && (
+            <div className="lucy-card p-8">
+              <h3 className="text-2xl font-black text-gray-700 mb-6 text-center">Export & Analytics</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="text-center">
+                  <button onClick={exportCSV} className="lucy-button w-full mb-4">Export CSV</button>
+                  <p className="text-sm text-gray-600">Download all entries as CSV for spreadsheet analysis</p>
+                </div>
+                <div className="text-center">
+                  <button onClick={exportJSON} className="lucy-button w-full mb-4">Export JSON</button>
+                  <p className="text-sm text-gray-600">Download raw data in JSON format</p>
+                </div>
+                <div className="text-center">
+                  <button onClick={showConsumeSummary} className="lucy-button w-full mb-4">View Summary</button>
+                  <p className="text-sm text-gray-600">Display detailed analytics in console</p>
+                </div>
+                <div className="text-center">
+                  <button onClick={clearAllData} className="lucy-button w-full mb-4" style={{backgroundColor: '#dc3545', borderColor: '#dc3545', color: 'white'}}>Clear All Data</button>
+                  <p className="text-sm text-gray-600">⚠️ Permanently delete all entries</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* PWA Install Button */}
+        <button id="installButton" className="fixed bottom-5 right-5 lucy-button" style={{display: 'none'}}>
+          📱 Install App
+        </button>
+      </div>
+      
+      {/* Scripts */}
+      <Script src="https://cdn.jsdelivr.net/npm/chart.js" strategy="beforeInteractive" />
+      <Script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js" strategy="beforeInteractive" />
+      <Script src="/tracker/tracker-app.js" strategy="afterInteractive" />
+      <Script src="/tracker/tracker-analytics.js" strategy="afterInteractive" />
+      <Script src="/tracker/tracker-pwa.js" strategy="afterInteractive" />
+    </>
+  );
+}
+

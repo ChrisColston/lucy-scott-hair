@@ -121,7 +121,7 @@ export default function LucyScottHair() {
                 <Instagram className="w-5 h-5" />
               </a>
               <button 
-                onClick={() => window.open('https://calendly.com/lucyscotthair', '_blank')}
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 className="lucy-button"
               >
                 Book Now
@@ -182,7 +182,7 @@ export default function LucyScottHair() {
                   Instagram
                 </a>
                 <button 
-                  onClick={() => window.open('https://calendly.com/lucyscotthair', '_blank')}
+                  onClick={() => { setIsMenuOpen(false); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
                   className="lucy-button text-sm px-6 py-2"
                 >
                   Book Now
@@ -317,7 +317,7 @@ export default function LucyScottHair() {
               </p>
 
               <button 
-                onClick={() => window.open('https://calendly.com/lucyscotthair', '_blank')}
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 className="lucy-button px-12 py-6 text-lg font-light tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 Book Now
@@ -493,7 +493,7 @@ export default function LucyScottHair() {
 
               {/* Contact Form */}
               <div className="bg-white/70 backdrop-blur-sm rounded-[10px] p-8 md:p-12 shadow-lg border-4 border-[#E5D5C8] mb-8">
-                <h4 className="text-2xl font-black text-[#4E4A47] mb-4 text-center">Send us an Enquiry</h4>
+                <h4 className="text-2xl font-black text-[#4E4A47] mb-4 text-center">Book for Availability</h4>
                 <p className="text-center text-[#4E4A47] mb-6 font-light italic">
                   Appointments are available by booking only. Our salon operates on Tuesdays and Thursdays, with flexible scheduling to accommodate your needs. Please contact us to discuss your requirements and check availability.
                 </p>
