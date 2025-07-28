@@ -86,21 +86,6 @@ export default function Tracker() {
     }
   }, [entries, activeTab]);
 
-  const calculateTotals = (entriesData) => {
-    let income = 0;
-    let expenses = 0;
-    
-    entriesData.forEach(entry => {
-      if (entry.type === 'expense') {
-        expenses += parseFloat(entry.amount) || 0;
-      } else {
-        income += parseFloat(entry.amount) || 0;
-      }
-    });
-    
-    setTotalIncome(income);
-    setTotalExpenses(expenses);
-  };
 
   const handleServiceTypeChange = (value) => {
     setServiceType(value);
@@ -219,27 +204,29 @@ export default function Tracker() {
     window.URL.revokeObjectURL(url);
   };
 
-  const clearAllData = () => {
-    if (confirm('Are you sure you want to delete all entries? This cannot be undone.')) {
-      localStorage.removeItem('lucyHairTrackerData');
-      setEntries([]);
-      setTotalIncome(0);
-      setTotalExpenses(0);
-      alert('All data has been cleared.');
+  const clearAllData = async () => {
+    if (confirm("Are you sure you want to delete all entries? This cannot be undone.")) {
+      try {
+        // Delete all entries from database
+        for (const entry of entries) {
+          await deleteEntryFromDB(entry.id);
+        }
+        alert("All data has been cleared.");
+      } catch (error) {
+        alert("Failed to clear all data. Please try again.");
+      }
     }
   };
-
   const showConsumeSummary = () => {
-    console.log('=== LUCY SCOTT HAIR TRACKER SUMMARY ===');
+    console.log("=== LUCY SCOTT HAIR TRACKER SUMMARY ===");
     console.log(`Total Entries: ${entries.length}`);
-    console.log(`Total Income: £${totalIncome.toFixed(2)}`);
-    console.log(`Total Expenses: £${totalExpenses.toFixed(2)}`);
-    console.log(`Net Profit: £${(totalIncome - totalExpenses).toFixed(2)}`);
-    console.log('=== DETAILED ENTRIES ===');
+    console.log(`Total Income: £${analytics.totalIncome.toFixed(2)}`);
+    console.log(`Total Expenses: £${analytics.totalExpenses.toFixed(2)}`);
+    console.log(`Net Profit: £${analytics.netProfit.toFixed(2)}`);
+    console.log("=== DETAILED ENTRIES ===");
     console.table(entries);
-    alert('Summary logged to console. Open Developer Tools to view.');
+    alert("Summary logged to console. Open Developer Tools to view.");
   };
-
   const handleDeleteEntry = async (entryId: string) => {
     if (confirm('Are you sure you want to delete this entry?')) {
       try {
