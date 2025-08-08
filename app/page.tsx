@@ -272,11 +272,6 @@ export default function LucyScottHair() {
                     video.muted = true;
                     video.play().catch(() => console.log('Play on loaded data failed'));
                   }}
-                  onCanPlay={(e) => {
-                    console.log('Video can play');
-                    const video = e.target as HTMLVideoElement;
-                    video.play().catch(() => console.log('Play on can play failed'));
-                  }}
                   onError={(e) => console.error('Video failed to load:', e)}
                 >
                   <source src="/LucyWebhero.mp4" type="video/mp4" />
