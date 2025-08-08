@@ -25,13 +25,17 @@ export async function GET() {
 
 // POST - Create new entry
 export async function POST(request: NextRequest) {
+  console.log('POST /api/entries - Request received');
   try {
     const body = await request.json();
+    console.log('Request body:', JSON.stringify(body, null, 2));
     
     // Validate required fields
     if (body.type == null || body.amount == null || body.date == null) {
+      const errorMsg = 'Missing required fields: type, amount, date';
+      console.error('Validation error:', errorMsg);
       return NextResponse.json(
-        { error: 'Missing required fields: type, amount, date' },
+        { error: errorMsg },
         { status: 400 }
       );
     }
@@ -39,25 +43,35 @@ export async function POST(request: NextRequest) {
     // Ensure amount is a valid number
     const amount = parseFloat(body.amount);
     if (isNaN(amount)) {
+      const errorMsg = 'Invalid amount provided';
+      console.error('Validation error:', errorMsg);
       return NextResponse.json(
-        { error: 'Invalid amount provided' },
+        { error: errorMsg },
         { status: 400 }
       );
     }
 
-    const newEntry = await db
-      .insert(entries)
-      .values({
-        type: body.type,
-        service: body.service || null,
-        description: body.description || null,
-        amount: body.amount.toString(),
-        quantity: body.quantity || 1,
-        date: body.date,
-      })
-      .returning();
-
-    return NextResponse.json(newEntry[0], { status: 201 });
+    console.log('Attempting to insert into database...');
+    
+    try {
+      const newEntry = await db
+        .insert(entries)
+        .values({
+          type: body.type,
+          service: body.service || null,
+          description: body.description || null,
+          amount: body.amount.toString(),
+          quantity: body.quantity || 1,
+          date: body.date,
+        })
+        .returning();
+      
+      console.log('Successfully inserted entry:', newEntry[0]);
+      return NextResponse.json(newEntry[0], { status: 201 });
+    } catch (dbError) {
+      console.error('Database error:', dbError);
+      throw dbError;
+    }
   } catch (error) {
     console.error('Error creating entry:', error);
     return NextResponse.json(

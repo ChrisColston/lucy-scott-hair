@@ -40,6 +40,7 @@ export function useEntries() {
   // Create new entry
   const createEntry = async (entryData: Omit<TrackerEntry, 'id' | 'createdAt' | 'updatedAt' | 'timestamp'>) => {
     try {
+      console.log('Creating entry with data:', entryData);
       const response = await fetch('/api/entries', {
         method: 'POST',
         headers: {
@@ -49,10 +50,13 @@ export function useEntries() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create entry');
+        const errorText = await response.text();
+        console.error('Failed to create entry. Status:', response.status, 'Response:', errorText);
+        throw new Error(`Failed to create entry: ${response.status} ${errorText}`);
       }
 
       const newEntry = await response.json();
+      console.log('Successfully created entry:', newEntry);
       setEntries(prev => [newEntry, ...prev]);
       return newEntry;
     } catch (err) {
