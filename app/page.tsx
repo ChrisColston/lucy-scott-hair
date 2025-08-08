@@ -272,7 +272,6 @@ export default function LucyScottHair() {
                     video.muted = true;
                     video.play().catch(() => console.log('Play on loaded data failed'));
                   }}
-                  onError={(e) => console.error('Video failed to load:', e)}
                 >
                   <source src="/LucyWebhero.mp4" type="video/mp4" />
                   {/* Fallback to image if video fails */}
