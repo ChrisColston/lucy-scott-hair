@@ -47,6 +47,7 @@ export default function Tracker() {
   const [quantity, setQuantity] = useState(1);
   const [editingEntry, setEditingEntry] = useState<string | null>(null);
   const [editingData, setEditingData] = useState<any>({});
+  const serviceChartRef = useRef<any>(null);
   const [analytics, setAnalytics] = useState({
     totalIncome: 0,
     totalExpenses: 0,
