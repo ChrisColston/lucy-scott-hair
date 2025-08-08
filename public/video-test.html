@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Playback Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d3748;
+            margin-top: 0;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            margin: 1rem 0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .success { color: #2ecc71; }
+        .error { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Video Playback Test</h1>
+        
+        <div class="video-container">
+            <video id="video" controls autoplay muted playsinline>
+                <source src="/LucyWebhero.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="info">
+            <p>Video source: <span id="source">/LucyWebhero.mp4</span></p>
+            <p>Status: <span id="status">Loading...</span></p>
+            <p>Error: <span id="error">None</span></p>
+            <p>Video readyState: <span id="readyState">-</span></p>
+            <p>Video networkState: <span id="networkState">-</span></p>
+            <p>Video error: <span id="videoError">-</span></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const statusEl = document.getElementById('status');
+            const errorEl = document.getElementById('error');
+            const readyStateEl = document.getElementById('readyState');
+            const networkStateEl = document.getElementById('networkState');
+            const videoErrorEl = document.getElementById('videoError');
+
+            function updateStatus(status, isError = false) {
+                statusEl.textContent = status;
+                statusEl.className = isError ? 'error' : 'success';
+                console.log('Status:', status);
+            }
+
+            function updateError(error) {
+                const errorMsg = error ? `${error.name}: ${error.message}` : 'None';
+                errorEl.textContent = errorMsg;
+                errorEl.className = error ? 'error' : '';
+                if (error) console.error('Error:', error);
+            }
+
+            // Event listeners for video
+            video.addEventListener('loadedmetadata', () => {
+                updateStatus('Loaded metadata');
+                updateReadyState();
+            });
+
+            video.addEventListener('loadeddata', () => {
+                updateStatus('Loaded data');
+                updateReadyState();
+            });
+
+            video.addEventListener('canplay', () => {
+                updateStatus('Can play');
+                updateReadyState();
+                
+                // Try to play the video
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        updateStatus('Autoplay failed', true);
+                        updateError(error);
+                    });
+                }
+            });
+
+            video.addEventListener('play', () => {
+                updateStatus('Playing');
+            });
+
+            video.addEventListener('error', () => {
+                updateStatus('Error occurred', true);
+                updateError(video.error);
+                updateReadyState();
+            });
+
+            video.addEventListener('stalled', () => {
+                updateStatus('Stalled - buffering', true);
+            });
+
+            video.addEventListener('suspend', () => {
+                updateStatus('Loading suspended', true);
+            });
+
+            video.addEventListener('waiting', () => {
+                updateStatus('Waiting for data', true);
+            });
+
+            function updateReadyState() {
+                const readyStates = [
+                    'HAVE_NOTHING',
+                    'HAVE_METADATA',
+                    'HAVE_CURRENT_DATA',
+                    'HAVE_FUTURE_DATA',
+                    'HAVE_ENOUGH_DATA'
+                ];
+                
+                const networkStates = [
+                    'NETWORK_EMPTY',
+                    'NETWORK_IDLE',
+                    'NETWORK_LOADING',
+                    'NETWORK_NO_SOURCE'
+                ];
+
+                readyStateEl.textContent = `${video.ready} (${readyStates[video.readyState] || 'Unknown'})`;
+                networkStateEl.textContent = `${video.networkState} (${networkStates[video.networkState] || 'Unknown'})`;
+                
+                if (video.error) {
+                    videoErrorEl.textContent = `Code ${video.error.code}: ${getErrorDescription(video.error.code)}`;
+                    videoErrorEl.className = 'error';
+                } else {
+                    videoErrorEl.textContent = 'None';
+                    videoErrorEl.className = '';
+                }
+            }
+
+            function getErrorDescription(code) {
+                const errorTypes = {
+                    1: 'MEDIA_ERR_ABORTED - The fetching process was aborted',
+                    2: 'MEDIA_ERR_NETWORK - A network error occurred',
+                    3: 'MEDIA_ERR_DECODE - An error occurred while decoding the media',
+                    4: 'MEDIA_ERR_SRC_NOT_SUPPORTED - The media is not supported'
+                };
+                return errorTypes[code] || 'Unknown error';
+            }
+
+            // Initial update
+            updateStatus('Initializing...');
+            updateReadyState();
+        });
+    </script>
+</body>
+</html>

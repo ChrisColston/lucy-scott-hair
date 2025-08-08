@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Test</title>
+    <style>
+        body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            background: #f0f0f0;
+        }
+        video {
+            max-width: 80%;
+            max-height: 80%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <video controls autoplay>
+        <source src="/LucyWebhero.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <script>
+        // Log video events for debugging
+        const video = document.querySelector('video');
+        video.addEventListener('error', (e) => {
+            console.error('Video error:', video.error);
+        });
+        video.addEventListener('canplay', () => {
+            console.log('Video can play');
+            video.play().catch(e => console.error('Play error:', e));
+        });
+    </script>
+</body>
+</html>
