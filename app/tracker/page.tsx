@@ -1,8 +1,9 @@
 "use client"
 
 import Script from 'next/script'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useEntries } from '@/hooks/useEntries'
+import ChartComponent from './components/ChartComponent'
 import { 
   FiPlus, 
   FiBarChart, 
@@ -36,7 +37,9 @@ const servicePrices: { [key: string]: number } = {
   'Balayage': 135
 };
 
+// Move all hooks to the top of the component
 export default function Tracker() {
+  // State hooks - all hooks must be called unconditionally at the top level
   const [activeTab, setActiveTab] = useState('entry');
   const [activeEntryType, setActiveEntryType] = useState('haircut');
   const [serviceType, setServiceType] = useState('');
@@ -44,77 +47,70 @@ export default function Tracker() {
   const [quantity, setQuantity] = useState(1);
   const [editingEntry, setEditingEntry] = useState<string | null>(null);
   const [editingData, setEditingData] = useState<any>({});
+  const [analytics, setAnalytics] = useState({
+    totalIncome: 0,
+    totalExpenses: 0,
+    netProfit: 0,
+    monthlyData: {},
+    entryCount: 0
+  });
   
-  // Use the database hook
-  const { 
-    entries, 
-    loading, 
-    error, 
-    createEntry, 
-    updateEntry, 
-    deleteEntry: deleteEntryFromDB, 
-    calculateAnalytics 
-  } = useEntries();
-
-  // Show error state
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-red-50">
-        <div className="text-center p-8">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Connection Error</h1>
-          <p className="text-red-500 mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Show loading state
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading tracker...</p>
-        </div>
-      </div>
-    );
-  }
-  
-  // Chart references
-  const serviceChartRef = useRef<any>(null);
-  const monthlyChartRef = useRef<any>(null);
-  const dailyChartRef = useRef<any>(null);
+  // Refs
   const chartsInitialized = useRef(false);
   
+  // Use the database hook - must be called unconditionally
+  const { 
+    entries = [], 
+    loading = true, 
+    error = null, 
+    createEntry = () => Promise.resolve(), 
+    updateEntry = () => Promise.resolve(), 
+    deleteEntry: deleteEntryFromDB = () => Promise.resolve(),
+    calculateAnalytics = () => ({
+      totalIncome: 0,
+      totalExpenses: 0,
+      netProfit: 0,
+      monthlyData: {},
+      entryCount: 0
+    })
+  } = useEntries();
+  
+  // Derived state
   const today = new Date().toISOString().split('T')[0];
   
-  // Calculate analytics from database entries
-  const analytics = calculateAnalytics();
+  // Helper functions
+  const formatAmount = (amount: string | number | null): string => {
+    if (amount === null || amount === undefined) return '0.00';
+    const num = typeof amount === 'string' ? parseFloat(amount) : amount;
+    return isNaN(num) ? '0.00' : num.toFixed(2);
+  };
 
-  // Initialize charts when dashboard tab is active and Chart.js is loaded
+  // Update analytics when entries change
   useEffect(() => {
-    if (activeTab === 'dashboard' && typeof window !== 'undefined' && (window as any).Chart) {
-      // Reset charts flag when switching to dashboard
-      chartsInitialized.current = false;
-      setTimeout(() => {
-        initCharts();
-        chartsInitialized.current = true;
-      }, 200);
+    if (!loading && !error) {
+      try {
+        setAnalytics(calculateAnalytics());
+      } catch (err) {
+        console.error('Error calculating analytics:', err);
+      }
     }
-  }, [activeTab]);
+  }, [entries, loading, error, calculateAnalytics]);
 
-  // Update charts when entries change
+  // Initialize Chart.js when component mounts
   useEffect(() => {
-    if (activeTab === 'dashboard' && chartsInitialized.current && typeof window !== 'undefined' && (window as any).Chart) {
-      updateCharts();
+    if (typeof window !== 'undefined' && !(window as any).Chart) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+      script.async = true;
+      script.onload = () => {
+        console.log('Chart.js loaded');
+      };
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
     }
-  }, [entries, activeTab]);
+  }, []);
 
 
   const handleServiceTypeChange = (value: string) => {
@@ -1041,7 +1037,7 @@ export default function Tracker() {
                             </div>
                           </div>
                           <div className={`entry-amount ${entry.type === 'expense' ? 'expense' : 'income'}`}>
-                            {entry.type === 'expense' ? '-' : '+'}£{typeof entry.amount === 'number' ? entry.amount.toFixed(2) : parseFloat(entry.amount).toFixed(2) || '0.00'}
+                            {entry.type === 'expense' ? '-' : '+'}£{formatAmount(entry.amount)}
                           </div>
                           <div className="entry-actions">
                             <button className="icon-button edit" onClick={() => startEditing(entry)}>
@@ -1092,8 +1088,10 @@ export default function Tracker() {
         </button>
       </div>
       
+      {/* Chart Component */}
+      <ChartComponent entries={entries} activeTab={activeTab} />
+      
       {/* Scripts */}
-      <Script src="https://cdn.jsdelivr.net/npm/chart.js" strategy="beforeInteractive" />
       <Script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js" strategy="beforeInteractive" />
       <Script src="/tracker/tracker-app.js" strategy="afterInteractive" />
       <Script src="/tracker/tracker-analytics.js" strategy="afterInteractive" />

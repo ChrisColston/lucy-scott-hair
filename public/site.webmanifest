@@ -1,0 +1,22 @@
+{
+  "name": "Lucy Scott Hair - Professional Hair Styling in Flushing, Cornwall",
+  "short_name": "Lucy Scott Hair",
+  "description": "Professional hair cutting, colouring, and styling services for all ages and genders in Flushing, Cornwall.",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#4E4A47",
+  "background_color": "#FDF5EA",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
+}

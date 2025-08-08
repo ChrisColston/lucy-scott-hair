@@ -1,0 +1,49 @@
+{
+  "name": "Lucy Scott Hair - Business Tracker",
+  "short_name": "Lucy Hair Tracker",
+  "description": "Track income, expenses, and business analytics for Lucy Scott Hair salon",
+  "start_url": "/tracker/",
+  "display": "standalone",
+  "background_color": "#FDF5EA",
+  "theme_color": "#D8A7B1",
+  "orientation": "portrait-primary",
+  "categories": ["business", "finance", "productivity"],
+  "lang": "en-GB",
+  "scope": "/tracker/",
+  "icons": [
+    {
+      "src": "../android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "../android-chrome-512x512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "../apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Entry",
+      "short_name": "Add Entry",
+      "description": "Quickly add a new income or expense entry",
+      "url": "/tracker/?tab=entry",
+      "icons": [{ "src": "../favicon-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Analytics",
+      "description": "View business analytics and charts",
+      "url": "/tracker/?tab=dashboard", 
+      "icons": [{ "src": "../favicon-32x32.png", "sizes": "32x32" }]
+    }
+  ]
+}

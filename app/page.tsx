@@ -219,14 +219,23 @@ export default function LucyScottHair() {
                     userSelect: 'none'
                   }}
                   onContextMenu={(e) => e.preventDefault()}
+                  onError={(e) => console.error('Video error:', e.currentTarget.error)}
+                  onCanPlay={(e) => {
+                    console.log('Video can play');
+                    const playPromise = e.currentTarget.play();
+                    if (playPromise !== undefined) {
+                      playPromise.catch(error => {
+                        console.error('Error attempting to play:', error);
+                      });
+                    }
+                  }}
+                  src="/LucyWebhero.mp4"
                   ref={(video) => {
                     if (video) {
-                      // Aggressive autoplay approach
                       video.muted = true;
                       video.volume = 0;
                       video.currentTime = 0;
                       
-                      // Multiple autoplay attempts
                       const tryPlay = () => {
                         const playPromise = video.play();
                         if (playPromise !== undefined) {
@@ -236,7 +245,6 @@ export default function LucyScottHair() {
                             })
                             .catch((error) => {
                               console.log('Autoplay failed, retrying...', error);
-                              // Retry multiple times
                               setTimeout(tryPlay, 100);
                             });
                         }
