@@ -1,0 +1,37 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "18"
+  DATABASE_URL = "postgresql://neondb_owner:npg_Wp08SgCnzwFt@ep-calm-rain-aei8g1fq-pooler.c-2.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require"
+
+# Next.js runtime configuration for API routes
+[context.production.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "false"
+  DATABASE_URL = "postgresql://neondb_owner:npg_Wp08SgCnzwFt@ep-calm-rain-aei8g1fq-pooler.c-2.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require"
+
+# Form handling and notifications
+[[forms]]
+  name = "contact"
+
+# Email notification (will need to be configured in Netlify dashboard)
+# Go to Site Settings > Forms > Form notifications
+# Add email notification with:
+# - Email: bookings@lucyscotthair.co.uk
+# - Subject: New Booking Enquiry - Lucy Scott Hair
+  
+# Headers for security and form handling
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/public/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

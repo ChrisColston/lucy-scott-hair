@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400&display=swap');
+
+/* Pure CSS Gradient Background Animation - Ivory/Bone Dominant */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-background {
+  background: linear-gradient(-45deg, #FDF5EA, #FDF5EA, #FDF5EA, #FAF9F6);
+  background-size: 300% 300%;
+  animation: gradient 30s ease infinite;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+}
+
+/* Typography overrides */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.heading-font {
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  color: #4E4A47;
+}
+
+.body-font {
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+  color: #4E4A47;
+}
+
+.body-font-light {
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 200;
+  font-style: italic;
+  color: #4E4A47;
+}
+
+.nav-font {
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  color: #4E4A47;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.font-black {
+  font-weight: 700;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* Lucy Scott Button Style */
+.lucy-button {
+  background-color: #FDF5EA;
+  border: 2px solid #E5D5C8;
+  border-radius: 12px;
+  color: #4E4A47;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 400;
+  padding: 12px 32px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(78, 74, 71, 0.1);
+}
+
+.lucy-button:hover {
+  background-color: #F8E5D6;
+  border-color: #D8A7B1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(78, 74, 71, 0.15);
+}
+
+/* Hero text with outline and multiply effect */
+.hero-text {
+  -webkit-text-stroke: 2px rgba(78, 74, 71, 0.8);
+  text-stroke: 2px rgba(78, 74, 71, 0.8);
+  mix-blend-mode: multiply;
+  filter: contrast(1.2);
+}
+
+/* Enhanced glass effect for sticky header */
+@supports (backdrop-filter: blur(0)) {
+  .backdrop-blur-md {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .printable-area, .printable-area * {
+    visibility: visible;
+  }
+  .printable-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
