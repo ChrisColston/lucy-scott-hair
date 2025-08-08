@@ -48,6 +48,8 @@ export default function Tracker() {
   const [editingEntry, setEditingEntry] = useState<string | null>(null);
   const [editingData, setEditingData] = useState<any>({});
   const serviceChartRef = useRef<any>(null);
+  const monthlyChartRef = useRef<any>(null);
+  const dailyChartRef = useRef<any>(null);
   const [analytics, setAnalytics] = useState({
     totalIncome: 0,
     totalExpenses: 0,
