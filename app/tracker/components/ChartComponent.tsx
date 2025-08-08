@@ -3,12 +3,13 @@
 import { useEffect, useRef } from 'react';
 
 type Entry = {
-  id: string;
+  id: string | number;  // Updated to accept both string and number
   type: string;
-  service?: string;
+  service?: string | null;
   amount: string | number;
   date: string;
-  description?: string;
+  description?: string | null;
+  quantity?: number | null;
 };
 
 type ChartComponentProps = {
